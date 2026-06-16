@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mediverse/screens/appointments/appointment_screen.dart';
-import 'package:mediverse/screens/medical_profile/attachment_screen.dart';
-import 'package:mediverse/screens/medical_profile/medical_history_screen.dart';
-import 'package:mediverse/screens/medical_profile/medications_screen.dart';
-import 'package:mediverse/screens/medical_profile/review_submit_screen.dart';
-import 'package:mediverse/screens/medical_records/encounter_timeline_screen.dart';
-import 'package:mediverse/screens/medical_records/medical_attachments_screen.dart';
+
+import 'features/midecal_record/patiant_medical_record/views/screens/medical_records_screens/medical_overview_screen.dart';
 
 
 
@@ -25,7 +20,7 @@ class Mediverse extends StatelessWidget {
         fontFamily: 'Roboto',
         scaffoldBackgroundColor: const Color(0xFFF2F2EF),
       ),
-      home: const MedicalAttachmentsScreen(),
+      home: const MedicalOverviewScreen(),
     );
   }
 }
