@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../core/constants/setting.dart';
-import '../../../../models/medical_profile_models/medication_model.dart';
+import '../../../../models/medication_model.dart';
 
 // =============================================
 // Widget - كارد الدواء الواحد داخل القائمة المضافة

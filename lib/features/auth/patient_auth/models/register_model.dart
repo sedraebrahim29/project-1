@@ -1,88 +1,62 @@
-import 'dart:typed_data';
-import 'package:image_picker/image_picker.dart';
-
 class RegisterModel {
-  // Step 1
   final String? email;
-  final String? phoneNumber;
   final String? password;
   final String? confirmPassword;
-  // Step 2
   final String? firstName;
   final String? lastName;
+  final String? idCardNumber;
+
+  final String? phone;
   final String? dateOfBirth;
   final String? gender;
   final String? homeAddress;
-  final String? streetAddress;
-  final String? cityStateZip;
+  final String? bloodType;
 
-  // Step 3
-  final XFile? scannedImage;
-  final Uint8List? webImageBytes;
+  final String? verificationCode;
+
   RegisterModel({
     this.email,
-    this.phoneNumber,
     this.password,
-    this.lastName,
     this.confirmPassword,
     this.firstName,
+    this.lastName,
+    this.idCardNumber,
+    this.phone,
     this.dateOfBirth,
     this.gender,
     this.homeAddress,
-    this.streetAddress,
-    this.cityStateZip,
-    this.scannedImage,
-    this.webImageBytes,
+    this.bloodType,
+    this.verificationCode,
   });
 
   RegisterModel copyWith({
     String? email,
-    String? phoneNumber,
     String? password,
     String? confirmPassword,
     String? firstName,
     String? lastName,
+    String? idCardNumber,
+    String? phone,
     String? dateOfBirth,
     String? gender,
-    String? streetAddress,
-    String? cityStateZip,
     String? homeAddress,
-    XFile? scannedImage,
-    Uint8List? webImageBytes,
+    String? bloodType,
+    String? verificationCode,
   }) {
     return RegisterModel(
       email: email ?? this.email,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
       password: password ?? this.password,
-      confirmPassword:confirmPassword ?? this.confirmPassword,
+      confirmPassword: confirmPassword ?? this.confirmPassword,
       firstName: firstName ?? this.firstName,
-      lastName:lastName ?? this.lastName,
+      lastName: lastName ?? this.lastName,
+      idCardNumber: idCardNumber ?? this.idCardNumber,
+      phone: phone ?? this.phone,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       gender: gender ?? this.gender,
-      homeAddress:homeAddress??this.homeAddress,
-      streetAddress: streetAddress ?? this.streetAddress,
-      cityStateZip: cityStateZip ?? this.cityStateZip,
-      scannedImage: scannedImage ?? this.scannedImage,
-      webImageBytes:webImageBytes??this.webImageBytes,
+      homeAddress: homeAddress ?? this.homeAddress,
+      bloodType: bloodType ?? this.bloodType,
+      verificationCode: verificationCode ?? this.verificationCode,
     );
   }
 
-
-  Map<String, dynamic> toJson() {
-    return {
-      'email': email,
-      'phone_number': phoneNumber,
-      'password': password,
-      'confirmPassword':confirmPassword,
-      'firstName': firstName,
-      'lastName' : lastName,
-      'homeAddress' : homeAddress,
-      'dob': dateOfBirth,
-      'gender': gender?.toLowerCase(),
-      'address': {
-        'street': streetAddress,
-        'city_state_zip': cityStateZip,
-      }
-    };
-  }
 }

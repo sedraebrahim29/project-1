@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../Login.dart'; // تأكدي من استدعاء ملف الـ Login الرئيسي الخاص بكِ
+import '../../Login.dart';
 
 class AccountUnderReviewScreen extends StatelessWidget {
   const AccountUnderReviewScreen({super.key});
@@ -10,7 +10,7 @@ class AccountUnderReviewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7F7F5), // لون الخلفية الفاتح المتناسق مع تصاميمكِ
+      backgroundColor: const Color(0xFFF7F7F5),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
@@ -20,7 +20,6 @@ class AccountUnderReviewScreen extends StatelessWidget {
             children: [
               const Spacer(),
 
-              // أيقونة الصح الخضراء الدائرية الكبيرة المطابقة للصورة المرفوعة
               Container(
                 padding: EdgeInsets.all(20.w),
                 decoration: BoxDecoration(
@@ -36,13 +35,12 @@ class AccountUnderReviewScreen extends StatelessWidget {
                 ),
                 child: Icon(
                   Icons.check_circle,
-                  color: const Color(0xFF2E5A44), // اللون الزيتي الخاص بالتطبيق
+                  color: const Color(0xFF2E5A44),
                   size: 64.sp,
                 ),
               ),
               SizedBox(height: 35.h),
 
-              // العنوان الرئيسي لانتظار موافقة الإدارة
               Text(
                 'Your account is under review',
                 textAlign: TextAlign.center,
@@ -54,7 +52,6 @@ class AccountUnderReviewScreen extends StatelessWidget {
               ),
               SizedBox(height: 15.h),
 
-              // الشرح التوضيحي للـ 24 ساعة
               Text(
                 'Verification may take up to 24 hours. You can explore the app with limited access in the meantime.',
                 textAlign: TextAlign.center,
@@ -66,7 +63,6 @@ class AccountUnderReviewScreen extends StatelessWidget {
               ),
               SizedBox(height: 40.h),
 
-              // بطاقة التوثيق الآمن (Secure Verification)
               Container(
                 padding: EdgeInsets.all(16.w),
                 decoration: BoxDecoration(
@@ -118,7 +114,6 @@ class AccountUnderReviewScreen extends StatelessWidget {
 
               const Spacer(),
 
-              // زر التوجيه والعودة إلى صفحة الـ Login
               SizedBox(
                 width: double.infinity,
                 height: 52.h,
@@ -131,7 +126,7 @@ class AccountUnderReviewScreen extends StatelessWidget {
                     elevation: 0,
                   ),
                   onPressed: () {
-                    // الانتقال لشاشة اللوجن وتصفير مكدس الصفحات حتى لا يستطيع العودة للخلف
+
                     Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(builder: (context) => const LoginScreen()),

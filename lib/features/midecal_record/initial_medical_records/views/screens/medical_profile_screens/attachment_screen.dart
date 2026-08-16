@@ -4,75 +4,59 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // --- Models ---
 import '../../../../../../core/constants/app_strings.dart';
 import '../../../../../../core/constants/setting.dart';
-import '../../../models/medical_profile_models/attached_model.dart';
 
 // --- Widgets ---
+import '../../../view_models/attachment_cubit.dart';
+import '../../../view_models/attachment_state.dart';
 import '../../widgets/medical_profile_widgets/attachments/attached_file_item.dart';
 import '../../widgets/medical_profile_widgets/attachments/upload_drop_zone.dart';
 import '../../widgets/medical_profile_widgets/medical_history_widgets/bottom_action_buttons.dart';
 import '../../widgets/medical_profile_widgets/medical_history_widgets/step_progress_bar.dart';
+import 'review_submit_screen.dart';
 
-class AttachmentScreen extends StatefulWidget {
+// =============================================
+// الشاشة الرئيسية - Medical Profile / Step 3
+// تحويل من StatefulWidget لـ StatelessWidget: قائمة الملفات صارت جوا
+// AttachmentCubit، والرفع الفعلي (bytes) بيصير عبر MedicalRecordRepository.
+// ملاحظة: الباك ما بيخزن اسم الملف الأصلي - بس فئة (type) بيحددها
+// المستخدم، فلهيك بعد اختيار الملف(ات) بنسأله عن الفئة قبل الرفع.
+// =============================================
+class AttachmentScreen extends StatelessWidget {
   const AttachmentScreen({super.key});
 
   @override
-  State<AttachmentScreen> createState() => _UploadFilesScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => AttachmentCubit()..loadAttachments(),
+      child: const _AttachmentView(),
+    );
+  }
 }
 
-class _UploadFilesScreenState extends State<AttachmentScreen> {
-  late List<AttachedFile> _attachedFiles;
+class _AttachmentView extends StatelessWidget {
+  const _AttachmentView();
 
-  @override
-  void initState() {
-    super.initState();
-    _attachedFiles = [
-      const AttachedFile(
-        name: 'Blood_Work_Q3.pdf',
-        size: '2.4 MB',
-        status: 'Complete',
-        fileType: AttachmentType.pdf,
-      ),
-      const AttachedFile(
-        name: 'Chest_X-Ray.jpg',
-        size: '5.1 MB',
-        status: 'Complete',
-        fileType: AttachmentType.image,
-      ),
-    ];
-  }
-
-  Future<void> _pickFile() async {
+  Future<void> _pickAndUpload(BuildContext context) async {
     final result = await fp.FilePicker.platform.pickFiles(
       allowMultiple: true,
       type: fp.FileType.any,
+      withData: true, // لازم حتى نقدر نرفع bytes الملف فعلياً للباك
     );
+    if (result == null || result.files.isEmpty) return;
+    if (!context.mounted) return;
 
-    if (result != null) {
-      setState(() {
-        for (final file in result.files) {
-          final ext = file.extension?.toLowerCase() ?? '';
+    final type = await showDialog<String>(
+      context: context,
+      builder: (_) => const _AttachmentTypeDialog(),
+    );
+    if (type == null || type.trim().isEmpty) return;
+    if (!context.mounted) return;
 
-          final fileType = ext == 'pdf'
-              ? AttachmentType.pdf
-              : ['jpg', 'jpeg', 'png', 'gif'].contains(ext)
-              ? AttachmentType.image
-              : AttachmentType.other;
-
-          _attachedFiles.add(
-            AttachedFile(
-              name: file.name,
-              size: '${(file.size / (1024 * 1024)).toStringAsFixed(1)} MB',
-              status: 'Complete',
-              fileType: fileType,
-            ),
-          );
-        }
-      });
+    final cubit = context.read<AttachmentCubit>();
+    for (final file in result.files) {
+      if (file.bytes == null) continue;
+      await cubit.uploadAttachment(bytes: file.bytes!, filename: file.name, type: type.trim());
     }
-  }
-
-  void _deleteFile(AttachedFile file) {
-    setState(() => _attachedFiles.remove(file));
   }
 
   @override
@@ -81,32 +65,40 @@ class _UploadFilesScreenState extends State<AttachmentScreen> {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: _buildAppBar(context),
+      appBar: _buildAppBar(context, theme),
       bottomNavigationBar: BottomActionButtons(
         onBack: () => Navigator.pop(context),
-        onNextStep: () {
-          // Navigator.push للشاشة التالية Step 4
+        onNextStep: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ReviewSubmitScreen()),
+        ),
+      ),
+      body: BlocConsumer<AttachmentCubit, AttachmentState>(
+        listener: (context, state) {
+          if (state.status == AttachmentStatus.failure && state.errorMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.errorMessage!)),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state.status == AttachmentStatus.loading ||
+              state.status == AttachmentStatus.initial) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return _buildBody(context, theme, state);
         },
       ),
-      body: _buildBody(context),
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
-    final theme = Theme.of(context);
-    final scaleFactor = BlocProvider.of<SettingsCubit>(
-      context,
-    ).state.scaleFactor;
-
+  PreferredSizeWidget _buildAppBar(BuildContext context, ThemeData theme) {
+    final scaleFactor = BlocProvider.of<SettingsCubit>(context).state.scaleFactor;
     return AppBar(
       backgroundColor: theme.scaffoldBackgroundColor,
       elevation: 0,
       leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back,
-          color: theme.textTheme.bodyLarge?.color,
-          size: 22,
-        ),
+        icon: Icon(Icons.arrow_back, color: theme.textTheme.bodyLarge?.color, size: 22),
         onPressed: () => Navigator.pop(context),
       ),
       title: Text(
@@ -121,11 +113,9 @@ class _UploadFilesScreenState extends State<AttachmentScreen> {
     );
   }
 
-  Widget _buildBody(BuildContext context) {
-    final theme = Theme.of(context);
-    final scaleFactor = BlocProvider.of<SettingsCubit>(
-      context,
-    ).state.scaleFactor;
+  Widget _buildBody(BuildContext context, ThemeData theme, AttachmentState state) {
+    final scaleFactor = BlocProvider.of<SettingsCubit>(context).state.scaleFactor;
+    final cubit = context.read<AttachmentCubit>();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
@@ -141,11 +131,8 @@ class _UploadFilesScreenState extends State<AttachmentScreen> {
             ),
           ),
           const SizedBox(height: 20),
-
           const StepProgressBar(currentStep: 3, totalSteps: 4),
-
           const SizedBox(height: 24),
-
           Text(
             AppStrings.uploadFilesTitle(context),
             style: TextStyle(
@@ -163,14 +150,15 @@ class _UploadFilesScreenState extends State<AttachmentScreen> {
               height: 1.5,
             ),
           ),
-
           const SizedBox(height: 20),
-
-          UploadDropZone(onTap: _pickFile),
-
+          if (state.status == AttachmentStatus.uploading)
+            const Padding(
+              padding: EdgeInsets.only(bottom: 12),
+              child: LinearProgressIndicator(),
+            ),
+          UploadDropZone(onTap: () => _pickAndUpload(context)),
           const SizedBox(height: 24),
-
-          if (_attachedFiles.isNotEmpty) ...[
+          if (state.attachments.isNotEmpty) ...[
             Text(
               AppStrings.attachedFilesSection(context),
               style: TextStyle(
@@ -180,15 +168,67 @@ class _UploadFilesScreenState extends State<AttachmentScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            ..._attachedFiles.map(
-              (file) => AttachedFileItem(
+            ...state.attachments.map(
+                  (file) => AttachedFileItem(
                 file: file,
-                onDelete: () => _deleteFile(file),
+                onDelete: () => cubit.deleteAttachment(file.id),
               ),
             ),
           ],
         ],
       ),
+    );
+  }
+}
+
+// =============================================
+// Dialog - اختيار فئة الملف (type) قبل الرفع
+// نفس التصنيفات المعروضة أصلاً بـ upload_drop_zone.dart كـ chips،
+// بالإضافة لحقل نص حر لأي فئة تانية.
+// =============================================
+class _AttachmentTypeDialog extends StatefulWidget {
+  const _AttachmentTypeDialog();
+
+  @override
+  State<_AttachmentTypeDialog> createState() => _AttachmentTypeDialogState();
+}
+
+class _AttachmentTypeDialogState extends State<_AttachmentTypeDialog> {
+  final _customController = TextEditingController();
+  static const _quickOptions = ['Lab Results', 'Prescriptions', 'Medical Images', 'X-ray photo'];
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('What kind of file is this?'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: _quickOptions
+                .map((label) => ActionChip(
+              label: Text(label),
+              onPressed: () => Navigator.pop(context, label),
+            ))
+                .toList(),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _customController,
+            decoration: const InputDecoration(labelText: 'Or type your own'),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context, _customController.text),
+          child: const Text('Upload'),
+        ),
+      ],
     );
   }
 }

@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart'; // المسار الصحيح لملف ألوانكِ
+import 'package:flutter/material.dart';
 import '../../../../../../../core/constants/app_strings.dart';
 import '../../../../../../../core/theme/app_colors.dart';
 import '../../../../models/medical_record_models/dashboard_overview_models.dart';
 
 // =============================================
-// Widget - كارد Recent Activity
-// عنوان + VIEW ALL + قائمة أنشطة
+// Widget - كارد Recent Activity (يدعم الثيمين)
 // =============================================
 class RecentActivityCard extends StatelessWidget {
   final List<ActivityItem> activities;
@@ -19,7 +18,6 @@ class RecentActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // التحقق من حالة الـ Dark Mode الحالية للثيم
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
@@ -42,13 +40,13 @@ class RecentActivityCard extends StatelessWidget {
                 Row(
                   children: [
                     Icon(
-                        Icons.history,
-                        size: 18,
-                        color: isDarkMode ? AppColors.darkText : AppColors.textDark
+                      Icons.history,
+                      size: 18,
+                      color: isDarkMode ? AppColors.darkText : AppColors.textDark,
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      AppStrings.recentActivity(context), // استخدام ملف الترجمة الأساسي الخاص بكِ
+                      AppStrings.recentActivity(context),
                       style: TextStyle(
                         color: isDarkMode ? AppColors.darkText : AppColors.textDark,
                         fontSize: 15,
@@ -60,7 +58,7 @@ class RecentActivityCard extends StatelessWidget {
                 GestureDetector(
                   onTap: onViewAll,
                   child: Text(
-                    AppStrings.viewAll(context), // استخدام ملف الترجمة الأساسي الخاص بكِ
+                    AppStrings.viewAll(context),
                     style: TextStyle(
                       color: isDarkMode ? AppColors.darkPrimaryGreen : AppColors.primaryGreen,
                       fontSize: 11,
@@ -90,7 +88,6 @@ class RecentActivityCard extends StatelessWidget {
 
 // =============================================
 // Sub-widget - عنصر النشاط الواحد
-// أيقونة مربعة + عنوان + وصف + وقت
 // =============================================
 class _ActivityItem extends StatelessWidget {
   final ActivityItem item;
@@ -120,7 +117,7 @@ class _ActivityItem extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // أيقونة مربعة بخلفية رمادية/داكنة متناسقة تماماً مع ألوان الثيم الجديدة
+              // أيقونة مربعة بخلفية متناسقة تماماً مع ألوان الدارك واللايت مود
               Container(
                 width: 38,
                 height: 38,
@@ -130,16 +127,16 @@ class _ActivityItem extends StatelessWidget {
                 ),
                 child: Center(
                   child: Icon(
-                      _icon,
-                      size: 18,
-                      color: isDarkMode ? AppColors.darkText : AppColors.textDark
+                    _icon,
+                    size: 18,
+                    color: isDarkMode ? AppColors.darkText : AppColors.textDark,
                   ),
                 ),
               ),
 
               const SizedBox(width: 12),
 
-              // النصوص مع مراعاة درجات رمادي الخطوط الفاتحة والداكنة من ملف ألوانكِ
+              // النصوص مستقاة بالكامل من درجات الألوان المحددة للمشروع
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +153,7 @@ class _ActivityItem extends StatelessWidget {
                     Text(
                       item.subtitle,
                       style: TextStyle(
-                        color: isDarkMode ? AppColors.darkText.withOpacity(0.7) : AppColors.textLightGrey,
+                        color: isDarkMode ? AppColors.darkText : AppColors.textLightGrey,
                         fontSize: 12,
                       ),
                     ),
@@ -164,7 +161,7 @@ class _ActivityItem extends StatelessWidget {
                     Text(
                       item.timestamp,
                       style: TextStyle(
-                        color: isDarkMode ? AppColors.darkText.withOpacity(0.5) : AppColors.textLightGrey,
+                        color: AppColors.textLightGrey,
                         fontSize: 11,
                       ),
                     ),
@@ -177,8 +174,8 @@ class _ActivityItem extends StatelessWidget {
 
         if (showDivider)
           Divider(
-              height: 1,
-              color: isDarkMode ? AppColors.darkBackground : AppColors.borderGrey
+            height: 1,
+            color: isDarkMode ? AppColors.darkBackground : AppColors.borderGrey,
           ),
       ],
     );

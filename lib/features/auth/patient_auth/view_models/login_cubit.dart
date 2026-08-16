@@ -1,49 +1,56 @@
-// المسار: lib/features/patient_auth/view_models/login_cubit.dart
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'login_state.dart';
+import '../../data/auth_repository.dart';
+import '../../../../core/network/api_exception.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  // الحالة الابتدائية الافتراضية للـ Cubit
-  LoginCubit() : super(const LoginState());
+  final AuthRepository _authRepository;
 
-  // 1. التبديل بين واجهة الـ Login و الـ Register (Tabs)
+  LoginCubit({AuthRepository? authRepository})
+      : _authRepository = authRepository ?? AuthRepository(),
+        super(const LoginState());
+
   void switchTab(LoginTab tab) {
     emit(state.copyWith(
       activeTab: tab,
-      status: LoginStatus.initial, // تصفير الحالة لضمان عدم تكرار الـ Listener
+      status: LoginStatus.initial,
     ));
   }
 
-  // 2. إظهار وإخفاء كلمة المرور (تغيير الأيقونة وحالة النص)
   void togglePasswordVisibility() {
     emit(state.copyWith(obscurePassword: !state.obscurePassword));
   }
 
-  // 3. دالة الـ Remember Me التي كان يعترض عليها الـ UI
-  void toggleRememberMe(bool? value) {
-    emit(state.copyWith(rememberMe: value ?? false));
-  }
-
-  // 4. دالة تسجيل الدخول المحدثة مع المنطق المؤقت للمريض
+  /// نداء فعلي لـ /auth/login. التوكن بينحفظ تلقائياً جوا AuthRepository.login
+  /// لو نجح. الباك بيرجع نفس الـ 422 لحالتين مختلفتين (بيانات دخول غلط / حساب
+  /// لسا قيد المراجعة) وما في حقل مميز بينهم غير نص الرسالة نفسها.
   Future<void> login(String email, String password) async {
-    // إطلاق حالة التحميل وتغيير الـ status
     emit(state.copyWith(isLoading: true, status: LoginStatus.loading));
 
-    // محاكاة تأخير السيرفر (800 مللي ثانية)
-    await Future.delayed(const Duration(milliseconds: 800));
-
-    // أولاً: نطلق حالة الانتظار (Pending) لكي يظهر السناك بار للمريض
-    emit(state.copyWith(
+    try {
+      await _authRepository.login(email, password);
+      emit(state.copyWith(isLoading: false, status: LoginStatus.success));
+    } on ApiException catch (e) {
+      final isPendingAccount = e.message.toLowerCase().contains('pending');
+      if (isPendingAccount) {
+        emit(state.copyWith(
+          isLoading: false,
+          status: LoginStatus.pending,
+          pendingMessage: e.message,
+        ));
+      } else {
+        emit(state.copyWith(
+          isLoading: false,
+          status: LoginStatus.error,
+          errorMessage: e.message,
+        ));
+      }
+    } catch (error) {
+      emit(state.copyWith(
         isLoading: false,
-        status: LoginStatus.pending,
-        pendingMessage: "Your account is under review by the admin. Redirecting to home..."
-    ));
-
-    // ثانياً: التمرير المؤقت لفتح الـ Home Page حالياً للاختبار والتطوير
-    emit(state.copyWith(
-      isLoading: false,
-      status: LoginStatus.success,
-    ));
+        status: LoginStatus.error,
+        errorMessage: error.toString(),
+      ));
+    }
   }
 }

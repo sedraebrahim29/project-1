@@ -1,214 +1,141 @@
 import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 
-class WorkplaceInfo {
-  final String type;
-  final String name;
-  final String workDays;
-  final String workHours;
-  final String consultationDuration;
-  final String fee;
-
-  WorkplaceInfo({
-    required this.type,
-    required this.name,
-    required this.workDays,
-    required this.workHours,
-    required this.consultationDuration,
-    required this.fee,
-  });
-
-  WorkplaceInfo copyWith({
-    String? type,
-    String? name,
-    String? workDays,
-    String? workHours,
-    String? consultationDuration,
-    String? fee,
-  }) {
-    return WorkplaceInfo(
-      type: type ?? this.type,
-      name: name ?? this.name,
-      workDays: workDays ?? this.workDays,
-      workHours: workHours ?? this.workHours,
-      consultationDuration: consultationDuration ?? this.consultationDuration,
-      fee: fee ?? this.fee,
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    'type': type,
-    'name': name,
-    'workDays': workDays,
-    'workHours': workHours,
-    'consultationDuration': consultationDuration,
-    'fee': fee,
-  };
-}
-
 class DoctorRegisterModel {
-  // Step 1
+
   final String? firstName;
   final String? lastName;
   final String? email;
-  final String? professionalEmail;
-  final String? phoneNumber;
   final String? password;
   final String? confirmPassword;
+  final String? idCardNumber;
 
-  // Step 2
+  final String? verificationCode;
+
+  final String? phone;
   final String? dateOfBirth;
   final String? gender;
   final String? homeAddress;
-  final String? mainSpecialty;
-  final String? subSpecialty;
 
-  // Step 3
-  final XFile? universityDegreeImage;
-  final Uint8List? universityDegreeBytes;
-  final String? educationDegree;
+  final XFile? idCardImage;
+  final Uint8List? idCardBytes;
+
+  final XFile? photoImage;
+  final Uint8List? photoBytes;
+
   final XFile? licenseImage;
   final Uint8List? licenseBytes;
-  final String? licenseNumber;
 
-  // Step 4
-  final List<WorkplaceInfo> workplaces;
-  final String? experienceYears;
-  final String? bio;
-  final bool? offersOnlineConsultation;
-  final String? onlineConsultationDuration;
-  final String? onlineConsultationFee;
-  final String? onlineAvailability;
+  final List<XFile> certificatesImages;
+  final List<Uint8List> certificatesBytes;
 
-  // ✅ الصورة الشخصية — جديد
-  final XFile? profileImage;
-  final Uint8List? profileImageBytes;
+  final String? registrationMode;
+  final String? clinicId;
+
+  final String? clinicName;
+  final String? clinicAddress;
+  final String? clinicPhone;
+  final XFile? clinicLicenseImage;
+  final Uint8List? clinicLicenseBytes;
+
+  // مضافة: مطلوبة من الباك بـ /auth/complete-profile (بكلا وضعي
+  // join_clinic و create_clinic حسب الـ Postman collection) - كانت
+  // ناقصة بالكامل بالموديل القديم وهاد كان سبب فشل الـ validation
+  // ("department_ids" / "practice_start_date" required).
+  final List<String> departmentIds;
+  final String? practiceStartDate;
 
   DoctorRegisterModel({
     this.firstName,
     this.lastName,
     this.email,
-    this.professionalEmail,
-    this.phoneNumber,
     this.password,
     this.confirmPassword,
+    this.idCardNumber,
+    this.verificationCode,
+    this.phone,
     this.dateOfBirth,
     this.gender,
     this.homeAddress,
-    this.mainSpecialty,
-    this.subSpecialty,
-    this.universityDegreeImage,
-    this.universityDegreeBytes,
-    this.educationDegree,
+    this.idCardImage,
+    this.idCardBytes,
+    this.photoImage,
+    this.photoBytes,
     this.licenseImage,
     this.licenseBytes,
-    this.licenseNumber,
-    this.workplaces = const [],
-    this.experienceYears,
-    this.bio,
-    this.offersOnlineConsultation = false,
-    this.onlineConsultationDuration,
-    this.onlineConsultationFee,
-    this.onlineAvailability,
-    this.profileImage,
-    this.profileImageBytes,
+    this.certificatesImages = const [],
+    this.certificatesBytes = const [],
+    this.registrationMode,
+    this.clinicId,
+    this.clinicName,
+    this.clinicAddress,
+    this.clinicPhone,
+    this.clinicLicenseImage,
+    this.clinicLicenseBytes,
+    this.departmentIds = const [],
+    this.practiceStartDate,
   });
 
   DoctorRegisterModel copyWith({
     String? firstName,
     String? lastName,
     String? email,
-    String? professionalEmail,
-    String? phoneNumber,
     String? password,
     String? confirmPassword,
+    String? idCardNumber,
+    String? verificationCode,
+    String? phone,
     String? dateOfBirth,
     String? gender,
     String? homeAddress,
-    String? mainSpecialty,
-    String? subSpecialty,
-    XFile? universityDegreeImage,
-    Uint8List? universityDegreeBytes,
-    String? educationDegree,
+    XFile? idCardImage,
+    Uint8List? idCardBytes,
+    XFile? photoImage,
+    Uint8List? photoBytes,
     XFile? licenseImage,
     Uint8List? licenseBytes,
-    String? licenseNumber,
-    List<WorkplaceInfo>? workplaces,
-    String? experienceYears,
-    String? bio,
-    bool? offersOnlineConsultation,
-    String? onlineConsultationDuration,
-    String? onlineConsultationFee,
-    String? onlineAvailability,
-    XFile? profileImage,
-    Uint8List? profileImageBytes,
+    List<XFile>? certificatesImages,
+    List<Uint8List>? certificatesBytes,
+    String? registrationMode,
+    String? clinicId,
+    String? clinicName,
+    String? clinicAddress,
+    String? clinicPhone,
+    XFile? clinicLicenseImage,
+    Uint8List? clinicLicenseBytes,
+    List<String>? departmentIds,
+    String? practiceStartDate,
   }) {
     return DoctorRegisterModel(
       firstName: firstName ?? this.firstName,
       lastName: lastName ?? this.lastName,
       email: email ?? this.email,
-      professionalEmail: professionalEmail ?? this.professionalEmail,
-      phoneNumber: phoneNumber ?? this.phoneNumber,
       password: password ?? this.password,
       confirmPassword: confirmPassword ?? this.confirmPassword,
+      idCardNumber: idCardNumber ?? this.idCardNumber,
+      verificationCode: verificationCode ?? this.verificationCode,
+      phone: phone ?? this.phone,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       gender: gender ?? this.gender,
       homeAddress: homeAddress ?? this.homeAddress,
-      mainSpecialty: mainSpecialty ?? this.mainSpecialty,
-      subSpecialty: subSpecialty ?? this.subSpecialty,
-      universityDegreeImage: universityDegreeImage ?? this.universityDegreeImage,
-      universityDegreeBytes: universityDegreeBytes ?? this.universityDegreeBytes,
-      educationDegree: educationDegree ?? this.educationDegree,
+      idCardImage: idCardImage ?? this.idCardImage,
+      idCardBytes: idCardBytes ?? this.idCardBytes,
+      photoImage: photoImage ?? this.photoImage,
+      photoBytes: photoBytes ?? this.photoBytes,
       licenseImage: licenseImage ?? this.licenseImage,
       licenseBytes: licenseBytes ?? this.licenseBytes,
-      licenseNumber: licenseNumber ?? this.licenseNumber,
-      workplaces: workplaces ?? this.workplaces,
-      experienceYears: experienceYears ?? this.experienceYears,
-      bio: bio ?? this.bio,
-      offersOnlineConsultation:
-      offersOnlineConsultation ?? this.offersOnlineConsultation,
-      onlineConsultationDuration:
-      onlineConsultationDuration ?? this.onlineConsultationDuration,
-      onlineConsultationFee:
-      onlineConsultationFee ?? this.onlineConsultationFee,
-      onlineAvailability: onlineAvailability ?? this.onlineAvailability,
-      profileImage: profileImage ?? this.profileImage,
-      profileImageBytes: profileImageBytes ?? this.profileImageBytes,
+      certificatesImages: certificatesImages ?? this.certificatesImages,
+      certificatesBytes: certificatesBytes ?? this.certificatesBytes,
+      registrationMode: registrationMode ?? this.registrationMode,
+      clinicId: clinicId ?? this.clinicId,
+      clinicName: clinicName ?? this.clinicName,
+      clinicAddress: clinicAddress ?? this.clinicAddress,
+      clinicPhone: clinicPhone ?? this.clinicPhone,
+      clinicLicenseImage: clinicLicenseImage ?? this.clinicLicenseImage,
+      clinicLicenseBytes: clinicLicenseBytes ?? this.clinicLicenseBytes,
+      departmentIds: departmentIds ?? this.departmentIds,
+      practiceStartDate: practiceStartDate ?? this.practiceStartDate,
     );
   }
 
-  /// الاسم الكامل للطبيب
-  String get fullName => '${firstName ?? ''} ${lastName ?? ''}'.trim();
-
-  /// الأحرف الأولى للعرض في الـ avatar عند غياب الصورة
-  String get initials {
-    final f = (firstName?.isNotEmpty == true) ? firstName![0].toUpperCase() : '';
-    final l = (lastName?.isNotEmpty == true) ? lastName![0].toUpperCase() : '';
-    return '$f$l';
-  }
-
-  Map<String, dynamic> toJson() => {
-    'firstName': firstName,
-    'lastName': lastName,
-    'email': email,
-    'professionalEmail': professionalEmail,
-    'phoneNumber': phoneNumber,
-    'password': password,
-    'dateOfBirth': dateOfBirth,
-    'gender': gender,
-    'homeAddress': homeAddress,
-    'mainSpecialty': mainSpecialty,
-    'subSpecialty': subSpecialty,
-    'educationDegree': educationDegree,
-    'licenseNumber': licenseNumber,
-    'workplaces': workplaces.map((w) => w.toJson()).toList(),
-    'experienceYears': experienceYears,
-    'bio': bio,
-    'onlineConsultation': {
-      'offered': offersOnlineConsultation,
-      'duration': onlineConsultationDuration,
-      'fee': onlineConsultationFee,
-      'availability': onlineAvailability,
-    },
-  };
 }

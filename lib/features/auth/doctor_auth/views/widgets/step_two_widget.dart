@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/constants/app_strings.dart';
 import '../../view_models/register_cubit.dart';
+import '../../view_models/register_state.dart';
 
 class StepTwoWidgets extends StatelessWidget {
   const StepTwoWidgets({super.key});
@@ -15,13 +16,7 @@ class StepTwoWidgets extends StatelessWidget {
 
     return BlocBuilder<DoctorRegisterCubit, DoctorRegisterState>(
       builder: (context, state) {
-        final currentGender = state.model.gender ?? 'female';
-        final mainSpecialty = state.model.mainSpecialty;
-
-        final List<String> mainSpecialties = AppStrings.mainSpecialties(context);
-        final List<String> subSpecialties = mainSpecialty != null
-            ? AppStrings.subSpecialties(context, mainSpecialty)
-            : [];
+        final currentGender = state.model.gender ?? 'male';
 
         return SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -40,14 +35,12 @@ class StepTwoWidgets extends StatelessWidget {
               ),
               SizedBox(height: 25.h),
 
-              // 1. Date of Birth
               Text(AppStrings.dateOfBirth(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
               SizedBox(height: 6.h),
               TextFormField(
                 controller: TextEditingController(text: state.model.dateOfBirth),
                 key: ValueKey(state.model.dateOfBirth),
                 readOnly: true,
-                validator: (val) => (val == null || val.isEmpty) ? AppStrings.requiredField(context) : null,
                 decoration: InputDecoration(
                   hintText: AppStrings.dateOfBirthHint(context),
                   prefixIcon: const Icon(Icons.calendar_today_outlined),
@@ -61,21 +54,18 @@ class StepTwoWidgets extends StatelessWidget {
                     lastDate: DateTime.now(),
                   );
                   if (pickedDate != null) {
-                    final formattedDate = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+                    final formattedDate =
+                        "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
                     cubit.updateRegisterModel(state.model.copyWith(dateOfBirth: formattedDate));
                   }
                 },
               ),
-              SizedBox(height: 15.h),
+              SizedBox(height: 20.h),
 
-              // 2. Gender
               Text(AppStrings.gender(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
               SizedBox(height: 8.h),
               Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8.r),
-                ),
+                decoration: BoxDecoration(color: Colors.grey.withOpacity(0.1), borderRadius: BorderRadius.circular(8.r)),
                 padding: EdgeInsets.all(4.w),
                 child: Row(
                   children: [
@@ -84,68 +74,34 @@ class StepTwoWidgets extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 15.h),
+              SizedBox(height: 20.h),
 
-              // 3. Home Address
               Text(AppStrings.homeAddress(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
               SizedBox(height: 6.h),
               TextFormField(
                 initialValue: state.model.homeAddress,
-                validator: (val) => (val == null || val.isEmpty) ? AppStrings.requiredField(context) : null,
+                maxLines: 2,
                 decoration: InputDecoration(
                   hintText: AppStrings.homeAddress(context),
-                  prefixIcon: const Icon(Icons.location_on_outlined),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                  contentPadding: EdgeInsets.all(12.w),
                 ),
-                onChanged: (value) {
-                  cubit.updateRegisterModel(state.model.copyWith(homeAddress: value));
-                },
+                onChanged: (value) => cubit.updateRegisterModel(state.model.copyWith(homeAddress: value)),
               ),
-              SizedBox(height: 15.h),
+              SizedBox(height: 20.h),
 
-              // 4. Main Specialty
-              Text(AppStrings.mainSpecialty(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
+              Text(AppStrings.phoneNumber(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
               SizedBox(height: 6.h),
-              DropdownButtonFormField<String>(
-                value: mainSpecialty,
-                validator: (val) => (val == null) ? AppStrings.requiredField(context) : null,
-                items: mainSpecialties.map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value, style: TextStyle(fontSize: 14.sp)),
-                  );
-                }).toList(),
+              TextFormField(
+                initialValue: state.model.phone,
+                keyboardType: TextInputType.phone,
                 decoration: InputDecoration(
+                  hintText: AppStrings.phoneHint(context),
+                  prefixIcon: const Icon(Icons.phone_outlined),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
                 ),
-                onChanged: (val) {
-                  cubit.updateRegisterModel(state.model.copyWith(mainSpecialty: val, subSpecialty: null));
-                },
-                hint: Text(AppStrings.selectSpecialty(context)),
-              ),
-              SizedBox(height: 15.h),
-
-              // 5. Sub Specialty
-              Text(AppStrings.subSpecialty(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
-              SizedBox(height: 6.h),
-              DropdownButtonFormField<String>(
-                value: state.model.subSpecialty,
-                validator: (val) => (val == null) ? AppStrings.requiredField(context) : null,
-                items: subSpecialties.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value, style: TextStyle(fontSize: 14.sp)),
-                  );
-                }).toList(),
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12.w),
-                ),
-                onChanged: (val) {
-                  cubit.updateRegisterModel(state.model.copyWith(subSpecialty: val));
-                },
-                hint: Text(AppStrings.selectSpecialty(context)),
+                onChanged: (value) => cubit.updateRegisterModel(state.model.copyWith(phone: value)),
               ),
               SizedBox(height: 20.h),
             ],
@@ -155,21 +111,21 @@ class StepTwoWidgets extends StatelessWidget {
     );
   }
 
-  Widget _buildGenderButton(BuildContext context, DoctorRegisterCubit cubit, DoctorRegisterState state, String currentGender, {required String value, required String label}) {
+  Widget _buildGenderButton(BuildContext context, DoctorRegisterCubit cubit, DoctorRegisterState state, String currentGender,
+      {required String value, required String label}) {
     final isSelected = currentGender == value;
     final themeColor = Theme.of(context).primaryColor;
 
     return Expanded(
       child: GestureDetector(
-        onTap: () {
-          cubit.updateRegisterModel(state.model.copyWith(gender: value));
-        },
+        onTap: () => cubit.updateRegisterModel(state.model.copyWith(gender: value)),
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 10.h),
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: isSelected ? Colors.white : Colors.transparent,
             borderRadius: BorderRadius.circular(6.r),
+            boxShadow: isSelected ? [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 4, offset: const Offset(0, 2))] : [],
           ),
           child: Text(
             label,

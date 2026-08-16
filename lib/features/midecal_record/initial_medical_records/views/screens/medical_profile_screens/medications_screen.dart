@@ -3,51 +3,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // --- Models ---
 import '../../../../../../core/constants/app_strings.dart';
 import '../../../../../../core/constants/setting.dart';
-import '../../../models/medical_profile_models/medication_model.dart';
-
 // --- Widgets ---
+import '../../../models/medication_model.dart';
+import '../../../view_models/medication_cubit.dart';
 import '../../widgets/medical_profile_widgets/medical_history_widgets/bottom_action_buttons.dart';
 import '../../widgets/medical_profile_widgets/medical_history_widgets/step_progress_bar.dart';
 import '../../widgets/medical_profile_widgets/medications/medication_card.dart';
+import 'attachment_screen.dart';
 
 // =============================================
-// الشاشة الرئيسية - Medical Profile / Step 3
-// مسؤوليتها:
-// ١. تحتفظ ببيانات الأدوية
-// ٢. تبني هيكل الشاشة (AppBar, Body, FAB, Bottom)
-// ٣. تستدعي الـ widgets وتمرر البيانات
+// الشاشة الرئيسية - Medical Profile / Step 2
+// تحويل من StatefulWidget لـ StatelessWidget: البيانات صارت جوا
+// MedicationsCubit، والـ FAB/dialog صارو ينادوا عليه مباشرة.
 // =============================================
-class MedicationsScreen extends StatefulWidget {
+class MedicationsScreen extends StatelessWidget {
   const MedicationsScreen({super.key});
 
   @override
-  State<MedicationsScreen> createState() => _MedicationsScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => MedicationsCubit()..loadMedications(),
+      child: const _MedicationsView(),
+    );
+  }
 }
 
-class _MedicationsScreenState extends State<MedicationsScreen> {
-  // =============================================
-  // بيانات الأدوية
-  // =============================================
-  final List<Medication> _medications = const [
-    Medication(
-      name: 'Metformin',
-      dosage: '500mg',
-      frequency: 'Once daily',
-      status: 'Active',
-    ),
-    Medication(
-      name: 'Lisinopril',
-      dosage: '10mg',
-      frequency: 'Twice daily',
-      status: 'Active',
-    ),
-    Medication(
-      name: 'Atorvastatin',
-      dosage: '20mg',
-      frequency: 'Once daily at bedtime',
-      status: 'Active',
-    ),
-  ];
+class _MedicationsView extends StatelessWidget {
+  const _MedicationsView();
 
   @override
   Widget build(BuildContext context) {
@@ -55,40 +37,51 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: _buildAppBar(theme),
-
-      // FAB المتجاوب مع ألوان الثيم الأساسية للتطبيق
-      floatingActionButton: _buildFAB(theme),
+      appBar: _buildAppBar(context, theme),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => showDialog(
+          context: context,
+          builder: (_) => _AddMedicationDialog(cubit: context.read<MedicationsCubit>()),
+        ),
+        backgroundColor: theme.primaryColor,
+        elevation: 4,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add, color: Colors.white, size: 26),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-
-      // الزران ثابتان في الأسفل متصلان بمسار النقل التدفقي للشاشات
       bottomNavigationBar: BottomActionButtons(
         onBack: () => Navigator.pop(context),
-        onNextStep: () {
-          // هنا يتم توجيه المستخدم للشاشة التالية في الخطوة 4 (رفع الملفات أو المراجعة)
+        onNextStep: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const AttachmentScreen()),
+        ),
+      ),
+      body: BlocConsumer<MedicationsCubit, MedicationsState>(
+        listener: (context, state) {
+          if (state.status == MedicationsStatus.failure && state.errorMessage != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.errorMessage!)),
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state.status == MedicationsStatus.loading ||
+              state.status == MedicationsStatus.initial) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          return _buildBody(context, theme, state);
         },
       ),
-
-      body: _buildBody(theme),
     );
   }
 
-  // =============================================
-  // AppBar Builder
-  // =============================================
-  PreferredSizeWidget _buildAppBar(ThemeData theme) {
-    final scaleFactor = BlocProvider.of<SettingsCubit>(
-      context,
-    ).state.scaleFactor;
+  PreferredSizeWidget _buildAppBar(BuildContext context, ThemeData theme) {
+    final scaleFactor = BlocProvider.of<SettingsCubit>(context).state.scaleFactor;
     return AppBar(
       backgroundColor: theme.scaffoldBackgroundColor,
       elevation: 0,
       leading: IconButton(
-        icon: Icon(
-          Icons.arrow_back,
-          color: theme.textTheme.bodyLarge?.color,
-          size: 22,
-        ),
+        icon: Icon(Icons.arrow_back, color: theme.textTheme.bodyLarge?.color, size: 22),
         onPressed: () => Navigator.pop(context),
       ),
       title: Text(
@@ -103,84 +96,11 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
     );
   }
 
-  // =============================================
-  // FAB Builder
-  // =============================================
-  Widget _buildFAB(ThemeData theme) {
-    return FloatingActionButton(
-      onPressed: () {
-        // فتح Dialog أو شاشة إضافة دواء جديد
-      },
-      backgroundColor: theme.primaryColor,
-      elevation: 4,
-      shape: const CircleBorder(),
-      child: const Icon(Icons.add, color: Colors.white, size: 26),
-    );
-  }
-
-  // =============================================
-  // Body Builder
-  // =============================================
-  Widget _buildBody(ThemeData theme) {
-    final scaleFactor = BlocProvider.of<SettingsCubit>(
-      context,
-    ).state.scaleFactor;
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 80),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // --- شريط التقدم: Step 3 of 4 ---
-          const StepProgressBar(currentStep: 2, totalSteps: 4),
-
-          const SizedBox(height: 24),
-
-          // --- عنوان الصفحة والوصف من ملف الترجمة الموحد ---
-          Text(
-            AppStrings.medicationsTitle(context),
-            style: TextStyle(
-              color: theme.textTheme.bodyLarge?.color,
-              fontSize: 24 * scaleFactor,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            AppStrings.medicationsDesc(context),
-            style: TextStyle(
-              color: theme.textTheme.bodyMedium?.color,
-              fontSize: 13 * scaleFactor,
-              height: 1.5,
-            ),
-          ),
-
-          const SizedBox(height: 20),
-
-          // =============================================
-          // قائمة الأدوية المعتمدة على الـ Card المتجاوب
-          // =============================================
-          ..._medications.map(
-            (medication) => MedicationCard(
-              medication: medication,
-              onMenuTap: () => _showMenuOptions(medication, theme),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // =============================================
-  // قائمة الخيارات (BottomSheet) المترجمة والمتجاوبة
-  // =============================================
-  void _showMenuOptions(Medication medication, ThemeData theme) {
-    final scaleFactor = BlocProvider.of<SettingsCubit>(
-      context,
-    ).state.scaleFactor;
+  void _showMenuOptions(BuildContext context, Medication medication, ThemeData theme) {
+    final scaleFactor = BlocProvider.of<SettingsCubit>(context).state.scaleFactor;
     final isDark = theme.brightness == Brightness.dark;
-    final currentLang = BlocProvider.of<SettingsCubit>(
-      context,
-    ).state.locale.languageCode;
+    final isEn = BlocProvider.of<SettingsCubit>(context).state.locale.languageCode == 'en';
+    final cubit = context.read<MedicationsCubit>();
 
     showModalBottomSheet(
       context: context,
@@ -202,39 +122,199 @@ class _MedicationsScreenState extends State<MedicationsScreen> {
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            // خيار التعديل المترجم داخلياً بناءً على اللغات المدعومة بالـ Cubit
-            ListTile(
-              leading: Icon(
-                Icons.edit_outlined,
-                color: theme.textTheme.bodyLarge?.color,
-              ),
-              title: Text(
-                currentLang == 'en' ? 'Edit' : 'تعديل',
-                style: TextStyle(
-                  color: theme.textTheme.bodyLarge?.color,
-                  fontSize: 16 * scaleFactor,
+            if (!medication.isStopped)
+              ListTile(
+                leading: const Icon(Icons.stop_circle_outlined, color: Color(0xFFD32F2F)),
+                title: Text(
+                  isEn ? 'Mark as stopped' : 'إيقاف الدواء',
+                  style: TextStyle(
+                    color: theme.textTheme.bodyLarge?.color,
+                    fontSize: 16 * scaleFactor,
+                  ),
                 ),
+                onTap: () {
+                  Navigator.pop(context);
+                  showDialog(
+                    context: context,
+                    builder: (_) => _StopMedicationDialog(cubit: cubit, medicationId: medication.id),
+                  );
+                },
               ),
-              onTap: () => Navigator.pop(context),
-            ),
-            // خيار الحذف المترجم
             ListTile(
-              leading: const Icon(
-                Icons.delete_outline,
-                color: Color(0xFFD32F2F),
-              ),
+              leading: const Icon(Icons.delete_outline, color: Color(0xFFD32F2F)),
               title: Text(
-                currentLang == 'en' ? 'Delete' : 'حذف',
-                style: TextStyle(
-                  color: const Color(0xFFD32F2F),
-                  fontSize: 16 * scaleFactor,
-                ),
+                isEn ? 'Delete' : 'حذف',
+                style: TextStyle(color: const Color(0xFFD32F2F), fontSize: 16 * scaleFactor),
               ),
-              onTap: () => Navigator.pop(context),
+              onTap: () {
+                Navigator.pop(context);
+                cubit.deleteMedication(medication.id);
+              },
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildBody(BuildContext context, ThemeData theme, MedicationsState state) {
+    final scaleFactor = BlocProvider.of<SettingsCubit>(context).state.scaleFactor;
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 80),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const StepProgressBar(currentStep: 2, totalSteps: 4),
+          const SizedBox(height: 24),
+          Text(
+            AppStrings.medicationsTitle(context),
+            style: TextStyle(
+              color: theme.textTheme.bodyLarge?.color,
+              fontSize: 24 * scaleFactor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            AppStrings.medicationsDesc(context),
+            style: TextStyle(
+              color: theme.textTheme.bodyMedium?.color,
+              fontSize: 13 * scaleFactor,
+              height: 1.5,
+            ),
+          ),
+          const SizedBox(height: 20),
+          ...state.medications.map(
+                (medication) => MedicationCard(
+              medication: medication,
+              onMenuTap: () => _showMenuOptions(context, medication, theme),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// =============================================
+// Dialog - إضافة دواء جديد
+// =============================================
+class _AddMedicationDialog extends StatefulWidget {
+  final MedicationsCubit cubit;
+  const _AddMedicationDialog({required this.cubit});
+
+  @override
+  State<_AddMedicationDialog> createState() => _AddMedicationDialogState();
+}
+
+class _AddMedicationDialogState extends State<_AddMedicationDialog> {
+  final _drugNameController = TextEditingController();
+  final _formController = TextEditingController(text: 'tablet');
+  final _strengthController = TextEditingController();
+  final _dosageController = TextEditingController();
+  final _frequencyController = TextEditingController();
+  final _routeController = TextEditingController(text: 'oral');
+  final _notesController = TextEditingController();
+  DateTime? _startDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Add Medication'),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(controller: _drugNameController, decoration: const InputDecoration(labelText: 'Drug name')),
+            TextField(controller: _formController, decoration: const InputDecoration(labelText: 'Form (tablet, syrup...)')),
+            TextField(controller: _strengthController, decoration: const InputDecoration(labelText: 'Strength (e.g. 500mg)')),
+            TextField(controller: _dosageController, decoration: const InputDecoration(labelText: 'Dosage (e.g. 1 tablet)')),
+            TextField(controller: _frequencyController, decoration: const InputDecoration(labelText: 'Frequency (e.g. once daily)')),
+            TextField(controller: _routeController, decoration: const InputDecoration(labelText: 'Route (oral, topical...)')),
+            const SizedBox(height: 8),
+            InkWell(
+              onTap: () async {
+                final picked = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                );
+                if (picked != null) setState(() => _startDate = picked);
+              },
+              child: InputDecorator(
+                decoration: const InputDecoration(labelText: 'Start date'),
+                child: Text(_startDate == null
+                    ? 'Select date'
+                    : '${_startDate!.year}-${_startDate!.month.toString().padLeft(2, '0')}-${_startDate!.day.toString().padLeft(2, '0')}'),
+              ),
+            ),
+            TextField(controller: _notesController, decoration: const InputDecoration(labelText: 'Notes (optional)')),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+        ElevatedButton(
+          onPressed: () {
+            if (_drugNameController.text.trim().isEmpty || _startDate == null) return;
+            widget.cubit.addMedication(
+              drugName: _drugNameController.text.trim(),
+              form: _formController.text.trim(),
+              strength: _strengthController.text.trim(),
+              dosage: _dosageController.text.trim(),
+              frequency: _frequencyController.text.trim(),
+              route: _routeController.text.trim(),
+              startDate:
+              '${_startDate!.year}-${_startDate!.month.toString().padLeft(2, '0')}-${_startDate!.day.toString().padLeft(2, '0')}',
+              notes: _notesController.text.trim().isEmpty ? null : _notesController.text.trim(),
+            );
+            Navigator.pop(context);
+          },
+          child: const Text('Save'),
+        ),
+      ],
+    );
+  }
+}
+
+// =============================================
+// Dialog - إيقاف دواء (stop) مع سبب اختياري
+// =============================================
+class _StopMedicationDialog extends StatefulWidget {
+  final MedicationsCubit cubit;
+  final int medicationId;
+  const _StopMedicationDialog({required this.cubit, required this.medicationId});
+
+  @override
+  State<_StopMedicationDialog> createState() => _StopMedicationDialogState();
+}
+
+class _StopMedicationDialogState extends State<_StopMedicationDialog> {
+  final _reasonController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Mark medication as stopped'),
+      content: TextField(
+        controller: _reasonController,
+        decoration: const InputDecoration(labelText: 'Reason (optional)'),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+        ElevatedButton(
+          onPressed: () {
+            widget.cubit.stopMedication(
+              widget.medicationId,
+              reason: _reasonController.text.trim().isEmpty ? null : _reasonController.text.trim(),
+            );
+            Navigator.pop(context);
+          },
+          child: const Text('Confirm'),
+        ),
+      ],
     );
   }
 }

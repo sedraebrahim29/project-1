@@ -4,18 +4,92 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/constants/app_strings.dart';
 import '../../view_models/register_cubit.dart';
+import '../../view_models/register_state.dart';
 
-class StepOneWidgets extends StatelessWidget {
-  const StepOneWidgets({super.key});
+class StepOneWidgets extends StatefulWidget {
+  final GlobalKey<FormState> formKey;
+
+  const StepOneWidgets({super.key, required this.formKey});
+
+  @override
+  State<StepOneWidgets> createState() => _StepOneWidgetsState();
+}
+
+class _StepOneWidgetsState extends State<StepOneWidgets> {
+  late final TextEditingController _firstNameController;
+  late final TextEditingController _lastNameController;
+  late final TextEditingController _emailController;
+  late final TextEditingController _idCardNumberController;
+  late final TextEditingController _passwordController;
+  late final TextEditingController _confirmPasswordController;
+
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+
+  @override
+  void initState() {
+    super.initState();
+    final model = context.read<DoctorRegisterCubit>().state.model;
+    _firstNameController = TextEditingController(text: model.firstName);
+    _lastNameController = TextEditingController(text: model.lastName);
+    _emailController = TextEditingController(text: model.email);
+    _idCardNumberController = TextEditingController(text: model.idCardNumber);
+    _passwordController = TextEditingController(text: model.password);
+    _confirmPasswordController = TextEditingController(text: model.confirmPassword);
+  }
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _idCardNumberController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
+  }
+
+  InputDecoration _inputDecoration({
+    required String hintText,
+    Widget? prefixIcon,
+    Widget? suffixIcon,
+    EdgeInsetsGeometry? contentPadding,
+    required bool isDarkMode,
+  }) {
+    return InputDecoration(
+      hintText: hintText,
+      prefixIcon: prefixIcon,
+      suffixIcon: suffixIcon,
+      contentPadding: contentPadding,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.r),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.r),
+        borderSide: BorderSide(color: AppColors.textLightGrey.withOpacity(0.4)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8.r),
+        borderSide: BorderSide(
+          color: isDarkMode ? AppColors.darkPrimaryGreen : AppColors.primaryGreen,
+          width: 2.0,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final themeColor = Theme.of(context).primaryColor;
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
     final cubit = context.read<DoctorRegisterCubit>();
 
-    return BlocBuilder<DoctorRegisterCubit, DoctorRegisterState>(
-      builder: (context, state) {
-        return SingleChildScrollView(
+    return BlocListener<DoctorRegisterCubit, DoctorRegisterState>(
+      listenWhen: (previous, current) => previous.currentStep != current.currentStep,
+      listener: (context, state) {},
+      child: Form(
+        key: widget.formKey,
+        child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -23,7 +97,7 @@ class StepOneWidgets extends StatelessWidget {
               SizedBox(height: 15.h),
               Text(
                 AppStrings.tellUsAboutYourself(context),
-                style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold, color: themeColor),
+                style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold, color: theme.primaryColor),
               ),
               SizedBox(height: 5.h),
               Text(
@@ -41,16 +115,14 @@ class StepOneWidgets extends StatelessWidget {
                         Text(AppStrings.firstName(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
                         SizedBox(height: 6.h),
                         TextFormField(
-                          initialValue: state.model.firstName,
+                          controller: _firstNameController,
                           validator: (val) => (val == null || val.isEmpty) ? AppStrings.requiredField(context) : null,
-                          decoration: InputDecoration(
+                          decoration: _inputDecoration(
                             hintText: AppStrings.firstNameHint(context),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                             contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                            isDarkMode: isDarkMode,
                           ),
-                          onChanged: (value) {
-                            cubit.updateRegisterModel(state.model.copyWith(firstName: value));
-                          },
+                          onChanged: (value) => cubit.updateRegisterModel(cubit.state.model.copyWith(firstName: value)),
                         ),
                       ],
                     ),
@@ -63,16 +135,14 @@ class StepOneWidgets extends StatelessWidget {
                         Text(AppStrings.lastName(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
                         SizedBox(height: 6.h),
                         TextFormField(
-                          initialValue: state.model.lastName,
+                          controller: _lastNameController,
                           validator: (val) => (val == null || val.isEmpty) ? AppStrings.requiredField(context) : null,
-                          decoration: InputDecoration(
+                          decoration: _inputDecoration(
                             hintText: AppStrings.lastNameHint(context),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                             contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                            isDarkMode: isDarkMode,
                           ),
-                          onChanged: (value) {
-                            cubit.updateRegisterModel(state.model.copyWith(lastName: value));
-                          },
+                          onChanged: (value) => cubit.updateRegisterModel(cubit.state.model.copyWith(lastName: value)),
                         ),
                       ],
                     ),
@@ -83,91 +153,75 @@ class StepOneWidgets extends StatelessWidget {
               Text(AppStrings.emailAddress(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
               SizedBox(height: 6.h),
               TextFormField(
-                initialValue: state.model.email,
+                controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 validator: (val) => (val == null || val.isEmpty || !val.contains('@')) ? AppStrings.invalidEmail(context) : null,
-                decoration: InputDecoration(
+                decoration: _inputDecoration(
                   hintText: AppStrings.emailHint(context),
                   prefixIcon: const Icon(Icons.email_outlined),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                  isDarkMode: isDarkMode,
                 ),
-                onChanged: (value) {
-                  cubit.updateRegisterModel(state.model.copyWith(email: value));
-                },
+                onChanged: (value) => cubit.updateRegisterModel(cubit.state.model.copyWith(email: value)),
               ),
               SizedBox(height: 15.h),
-              Text('${AppStrings.professionalEmail(context)} ${AppStrings.optional(context)}', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
+              Text('ID Card Number', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
               SizedBox(height: 6.h),
               TextFormField(
-                initialValue: state.model.professionalEmail,
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  hintText: AppStrings.emailHint(context),
-                  prefixIcon: const Icon(Icons.work_outline),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
-                ),
-                onChanged: (value) {
-                  cubit.updateRegisterModel(state.model.copyWith(professionalEmail: value));
-                },
-              ),
-              SizedBox(height: 15.h),
-              Text(AppStrings.phoneNumber(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
-              SizedBox(height: 6.h),
-              TextFormField(
-                initialValue: state.model.phoneNumber,
-                keyboardType: TextInputType.phone,
+                controller: _idCardNumberController,
+                keyboardType: TextInputType.number,
                 validator: (val) => (val == null || val.isEmpty) ? AppStrings.requiredField(context) : null,
-                decoration: InputDecoration(
-                  hintText: AppStrings.phoneHint(context),
-                  prefixIcon: const Icon(Icons.phone_outlined),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                decoration: _inputDecoration(
+                  hintText: 'Enter your ID card number',
+                  prefixIcon: const Icon(Icons.badge_outlined),
+                  isDarkMode: isDarkMode,
                 ),
-                onChanged: (value) {
-                  cubit.updateRegisterModel(state.model.copyWith(phoneNumber: value));
-                },
+                onChanged: (value) => cubit.updateRegisterModel(cubit.state.model.copyWith(idCardNumber: value)),
               ),
               SizedBox(height: 15.h),
               Text(AppStrings.password(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
               SizedBox(height: 6.h),
               TextFormField(
-                initialValue: state.model.password,
-                obscureText: true,
+                controller: _passwordController,
+                obscureText: _obscurePassword,
                 validator: (val) => (val == null || val.length < 8) ? AppStrings.passwordLengthWarning(context) : null,
-                decoration: InputDecoration(
+                decoration: _inputDecoration(
                   hintText: AppStrings.passwordHint(context),
                   prefixIcon: const Icon(Icons.lock_outline),
-                  suffixIcon: const Icon(Icons.visibility_off_outlined),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                  suffixIcon: IconButton(
+                    icon: Icon(_obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined),
+                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                  ),
+                  isDarkMode: isDarkMode,
                 ),
-                onChanged: (value) {
-                  cubit.updateRegisterModel(state.model.copyWith(password: value));
-                },
+                onChanged: (value) => cubit.updateRegisterModel(cubit.state.model.copyWith(password: value)),
               ),
               SizedBox(height: 15.h),
               Text(AppStrings.confirmPassword(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
               SizedBox(height: 6.h),
               TextFormField(
-                initialValue: state.model.confirmPassword,
-                obscureText: true,
+                controller: _confirmPasswordController,
+                obscureText: _obscureConfirmPassword,
                 validator: (val) {
-                   if (val == null || val.isEmpty) return AppStrings.requiredField(context);
-                   if (val != state.model.password) return AppStrings.passwordsDoNotMatch(context);
-                   return null;
+                  if (val == null || val.isEmpty) return AppStrings.requiredField(context);
+                  if (val != _passwordController.text) return AppStrings.passwordsDoNotMatch(context);
+                  return null;
                 },
-                decoration: InputDecoration(
+                decoration: _inputDecoration(
                   hintText: AppStrings.passwordHint(context),
                   prefixIcon: const Icon(Icons.lock_outline),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                  suffixIcon: IconButton(
+                    icon: Icon(_obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined),
+                    onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+                  ),
+                  isDarkMode: isDarkMode,
                 ),
-                onChanged: (value) {
-                  cubit.updateRegisterModel(state.model.copyWith(confirmPassword: value));
-                },
+                onChanged: (value) => cubit.updateRegisterModel(cubit.state.model.copyWith(confirmPassword: value)),
               ),
               SizedBox(height: 20.h),
             ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

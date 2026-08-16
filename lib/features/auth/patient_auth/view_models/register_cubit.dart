@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/register_model.dart';
 import 'register_state.dart';
+import '../../data/auth_repository.dart';
+import '../../../../core/network/api_constants.dart';
+import '../../../../core/network/api_exception.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
-  // تعريف الـ PageController لإدارة التنقل بين شاشات الـ PageView
   final PageController pageController = PageController();
-
-  // إجمالي عدد الخطوات في شاشة التسجيل
+  // 1: Basic Info -> register | 2: Verify Email -> verify-code
+  // 3: Personal Details (محلي) | 4: Review -> complete-profile
   final int totalSteps = 4;
 
-  RegisterCubit() : super(RegisterInitial());
+  final AuthRepository _authRepository;
 
-  // 1. الدالة المركزية لتحديث بيانات الموديل حياً من أي واجهة
+  RegisterCubit({AuthRepository? authRepository})
+      : _authRepository = authRepository ?? AuthRepository(),
+        super(RegisterInitial());
+
   void updateRegisterModel(RegisterModel updatedModel) {
     emit(RegisterStepChanged(
       currentStep: state.currentStep,
@@ -20,60 +25,132 @@ class RegisterCubit extends Cubit<RegisterState> {
     ));
   }
 
-  // 2. الانتقال إلى الخطوة التالية مع عمل Validation
-  void nextStep(GlobalKey<FormState> formKey) {
-    if (state.currentStep < totalSteps) {
-      // التحقق من صحة المدخلات في الخطوة الحالية قبل الانتقال
-      if (formKey.currentState?.validate() ?? true) {
-        final nextStepNumber = state.currentStep + 1;
+  /// كل خطوة إلها منطق مختلف لأنه كل وحدة مرتبطة بنداء API مختلف بالباك اند.
+  Future<void> nextStep(GlobalKey<FormState> formKey) async {
+    if (!(formKey.currentState?.validate() ?? true)) return;
 
-        emit(RegisterStepChanged(
-          currentStep: nextStepNumber,
-          model: state.model,
-        ));
-
-        // تحريك الـ PageView للخطوة التالية بسلاسة
-        pageController.animateToPage(
-          nextStepNumber - 1,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      }
-    } else {
-      // إذا كنا في الخطوة الرابعة والأخيرة، يتم تنفيذ الإرسال النهائي للباك اند
-      submitRegistration();
+    switch (state.currentStep) {
+      case 1:
+        await _submitRegister();
+        break;
+      case 2:
+        await _verifyEmailStep();
+        break;
+      case 3:
+        _moveToNextStepLocally();
+        break;
+      default:
+        submitRegistration();
     }
   }
 
-  // 3. العودة للخطوة السابقة عند ضغط زر الظهر أو السهم العلوي
+  /// خطوة 1: نداء فعلي لـ /auth/register
+  Future<void> _submitRegister() async {
+    final model = state.model;
+    final currentStep = state.currentStep;
+
+    emit(RegisterStepSubmitting(currentStep: currentStep, model: model));
+
+    try {
+      await _authRepository.register({
+        'role': 'patient',
+        'first_name': model.firstName,
+        'last_name': model.lastName,
+        'email': model.email,
+        'password': model.password,
+        ApiConstants.passwordConfirmationKey: model.confirmPassword,
+        'ID_card_number': model.idCardNumber,
+      });
+
+      _advanceToStep(currentStep + 1, model);
+    } on ApiException catch (e) {
+      emit(RegisterSubmitFailure(
+        currentStep: currentStep,
+        model: model,
+        errorMessage: e.message,
+        fieldErrors: e.errors,
+      ));
+    }
+  }
+
+  /// خطوة 2: نداء فعلي لـ /auth/email/verify-code
+  /// السيرفر بيكون بعت الكود تلقائياً وقت نجاح الـ register بالخطوة السابقة
+  Future<void> _verifyEmailStep() async {
+    final model = state.model;
+    final currentStep = state.currentStep;
+    final code = model.verificationCode?.trim();
+
+    if (code == null || code.isEmpty) {
+      emit(RegisterSubmitFailure(
+        currentStep: currentStep,
+        model: model,
+        errorMessage: 'الرجاء إدخال كود التحقق المرسل إلى بريدك الإلكتروني',
+      ));
+      return;
+    }
+
+    emit(RegisterStepSubmitting(currentStep: currentStep, model: model));
+
+    try {
+      await _authRepository.verifyEmailCode(code);
+      _advanceToStep(currentStep + 1, model);
+    } on ApiException catch (e) {
+      emit(RegisterSubmitFailure(
+        currentStep: currentStep,
+        model: model,
+        errorMessage: e.message,
+        fieldErrors: e.errors,
+      ));
+    }
+  }
+
+  /// إعادة إرسال كود التفعيل - بترجع true/false حتى الـ Widget يقرر شو يعمل
+  Future<bool> resendVerificationCode() async {
+    try {
+      await _authRepository.resendCode();
+      return true;
+    } on ApiException catch (e) {
+      emit(RegisterSubmitFailure(
+        currentStep: state.currentStep,
+        model: state.model,
+        errorMessage: e.message,
+        fieldErrors: e.errors,
+      ));
+      return false;
+    }
+  }
+
+  void _moveToNextStepLocally() {
+    final nextStepNumber = state.currentStep + 1;
+    _advanceToStep(nextStepNumber, state.model);
+  }
+
+  void _advanceToStep(int stepNumber, RegisterModel model) {
+    emit(RegisterStepChanged(currentStep: stepNumber, model: model));
+    pageController.animateToPage(
+      stepNumber - 1,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
   void previousStep(BuildContext context) {
     if (state.currentStep > 1) {
       final prevStepNumber = state.currentStep - 1;
-
-      emit(RegisterStepChanged(
-        currentStep: prevStepNumber,
-        model: state.model,
-      ));
-
+      emit(RegisterStepChanged(currentStep: prevStepNumber, model: state.model));
       pageController.animateToPage(
         prevStepNumber - 1,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     } else {
-      // إذا كان في الخطوة الأولى وضغط خلف، يتم إغلاق الشاشة والعودة لصفحة اللوجن
       Navigator.pop(context);
     }
   }
 
-  // 4. الدالة السحرية للقفز المباشر لأي خطوة (تُستدعى عند ضغط زر التعديل "القلم" في الخطوة 4)
   void jumpToStep(int stepNumber) {
     if (stepNumber >= 1 && stepNumber <= totalSteps) {
-      emit(RegisterStepChanged(
-        currentStep: stepNumber,
-        model: state.model,
-      ));
-
+      emit(RegisterStepChanged(currentStep: stepNumber, model: state.model));
       pageController.animateToPage(
         stepNumber - 1,
         duration: const Duration(milliseconds: 400),
@@ -82,23 +159,33 @@ class RegisterCubit extends Cubit<RegisterState> {
     }
   }
 
-  // 5. دالة الإرسال النهائي للـ API (الربط مع الـ Back-end مستقبلاً)
+  /// خطوة 4 (الأخيرة): نداء فعلي لـ /auth/complete-profile
   Future<void> submitRegistration() async {
+    final model = state.model;
+    final currentStep = state.currentStep;
+
+    emit(RegisterStepSubmitting(currentStep: currentStep, model: model));
+
     try {
-      // استخراج الـ Map الجاهز للإرسال كـ JSON body للـ API
-      final Map<String, dynamic> requestData = state.model.toJson();
-
-      // طباعة البيانات في الـ Console للتأكد من اكتمالها
-      print('Sending Data to Back-end: $requestData');
-
-      // هنا سيتم استدعاء الـ Repository والـ Dio لاحقاً:
-      // await _authRepository.register(requestData);
-
-      emit(RegisterSubmitSuccess(currentStep: state.currentStep, model: state.model));
+      await _authRepository.completeProfile({
+        'phone': model.phone,
+        'gender': model.gender,
+        'dob': model.dateOfBirth,
+        'address': model.homeAddress,
+        'blood_type': model.bloodType,
+      });
+      emit(RegisterSubmitSuccess(currentStep: currentStep, model: model));
+    } on ApiException catch (e) {
+      emit(RegisterSubmitFailure(
+        currentStep: currentStep,
+        model: model,
+        errorMessage: e.message,
+        fieldErrors: e.errors,
+      ));
     } catch (error) {
       emit(RegisterSubmitFailure(
-        currentStep: state.currentStep,
-        model: state.model,
+        currentStep: currentStep,
+        model: model,
         errorMessage: error.toString(),
       ));
     }
@@ -106,7 +193,7 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   @override
   Future<void> close() {
-    pageController.dispose(); // إغلاق الـ controller لحماية الذاكرة من الـ memory leaks
+    pageController.dispose();
     return super.close();
   }
 }

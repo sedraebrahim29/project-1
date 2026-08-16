@@ -7,6 +7,13 @@ import '../../../../../../core/constants/app_strings.dart';
 import '../../../models/medical_record_models/encounter_model.dart';
 import '../../widgets/medical_records_widgets/timeline_encounter_card.dart';
 
+// =============================================
+// ⚠️ ملاحظة: هاي الشاشة مش مربوطة بأي endpoint حالياً - ما في
+// Encounters/Visits API بالـ Postman collection المرسل. تركناها متل
+// ما هي (بياناتها Mock). مو مضافة كتاب بشاشة MedicalOverviewScreen
+// الجديدة لهاد السبب. لو حبيتوا تفعّلوها لاحقاً، لازم أولاً endpoint
+// بالباك يرجع سجل الزيارات/اللقاءات الطبية.
+// =============================================
 class EncounterTimelineScreen extends StatefulWidget {
   const EncounterTimelineScreen({super.key});
 

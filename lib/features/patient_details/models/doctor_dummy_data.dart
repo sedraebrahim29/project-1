@@ -1,18 +1,18 @@
-/// نموذج بيانات الطبيب كما يصل من الـ API في شاشة القائمة
+
 class DoctorListingModel {
   final String id;
   final String firstName;
   final String lastName;
   final String mainSpecialty;
   final String subSpecialty;
-  final String? profileImageUrl;   // URL من السيرفر بعد الرفع
+  final String? profileImageUrl;
   final double rating;
   final int reviewCount;
   final List<String> workplaceNames;
-  final String primaryWorkplaceType; // hospital / center / clinic
-  final String? availabilityStatus;  // 'today' | 'tomorrow' | 'in_N_days' | null
+  final String primaryWorkplaceType;
+  final String? availabilityStatus;
   final int? availableInDays;
-  final double consultationFee;      // أقل سعر من أماكن العمل
+  final double consultationFee;
   final bool offersOnlineConsultation;
   final String? educationDegree;
   final String? experienceYears;
@@ -88,3 +88,11 @@ class DoctorListingModel {
         isFavourite: json['isFavourite'] as bool? ?? false,
       );
 }
+
+
+final List<DoctorListingModel> dummyDoctors = [
+  DoctorListingModel(id:'1',firstName:'Sarah',lastName:'Jenkins',mainSpecialty:'Medicine',subSpecialty:'Cardiology',rating:4.9,reviewCount:128,workplaceNames:['City Heart Hospital'],primaryWorkplaceType:'hospital',availabilityStatus:'today',consultationFee:150,offersOnlineConsultation:true,experienceYears:'12',isFavourite:true),
+  DoctorListingModel(id:'2',firstName:'Marcus',lastName:'Chen',mainSpecialty:'Medicine',subSpecialty:'General Practice',rating:4.8,reviewCount:95,workplaceNames:['BlueCare Medical Center'],primaryWorkplaceType:'center',availabilityStatus:'tomorrow',consultationFee:90,offersOnlineConsultation:false,experienceYears:'8'),
+  DoctorListingModel(id:'3',firstName:'Emily',lastName:'Thorne',mainSpecialty:'Medicine',subSpecialty:'Dermatology',rating:4.9,reviewCount:210,workplaceNames:['Skin & Beauty Clinic'],primaryWorkplaceType:'clinic',availabilityStatus:'today',consultationFee:120,offersOnlineConsultation:true,experienceYears:'15'),
+  DoctorListingModel(id:'4',firstName:'Ali',lastName:'Khalid',mainSpecialty:'Dentistry',subSpecialty:'Orthodontics',rating:4.7,reviewCount:67,workplaceNames:['Smile Pro Dental Center'],primaryWorkplaceType:'center',availabilityStatus:'in_N_days',availableInDays:3,consultationFee:80,offersOnlineConsultation:false,experienceYears:'6'),
+];

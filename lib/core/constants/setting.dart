@@ -7,20 +7,35 @@ class SettingsState {
   final Locale locale;
   final ThemeMode themeMode;
   final FontScale fontScale;
+  final bool notificationsEnabled;
 
   SettingsState({
     required this.locale,
     required this.themeMode,
     required this.fontScale,
+    this.notificationsEnabled = true,
   });
 
-  // حساب معامل الضرب بناءً على الحجم المختار
   double get scaleFactor {
     switch (fontScale) {
       case FontScale.normal: return 0.6;
       case FontScale.medium: return 0.9;
       case FontScale.large: return 1.2;
     }
+  }
+
+  SettingsState copyWith({
+    Locale? locale,
+    ThemeMode? themeMode,
+    FontScale? fontScale,
+    bool? notificationsEnabled,
+  }) {
+    return SettingsState(
+      locale: locale ?? this.locale,
+      themeMode: themeMode ?? this.themeMode,
+      fontScale: fontScale ?? this.fontScale,
+      notificationsEnabled: notificationsEnabled ?? this.notificationsEnabled,
+    );
   }
 }
 
@@ -32,19 +47,17 @@ class SettingsCubit extends Cubit<SettingsState> {
   ));
 
   void toggleLanguage() {
-    emit(SettingsState(
+    emit(state.copyWith(
       locale: state.locale.languageCode == 'en' ? const Locale('ar') : const Locale('en'),
-      themeMode: state.themeMode,
-      fontScale: state.fontScale,
     ));
   }
 
   void toggleTheme() {
-    final nextTheme = state.themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
-    emit(SettingsState(locale: state.locale, themeMode: nextTheme, fontScale: state.fontScale));
+    emit(state.copyWith(
+      themeMode: state.themeMode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light,
+    ));
   }
 
-  // التبديل بين الأحجام الثلاثة بالتناوب (Normal -> Medium -> Large -> Normal)
   void cycleFontScale() {
     FontScale nextScale;
     switch (state.fontScale) {
@@ -52,6 +65,14 @@ class SettingsCubit extends Cubit<SettingsState> {
       case FontScale.medium: nextScale = FontScale.large; break;
       case FontScale.large: nextScale = FontScale.normal; break;
     }
-    emit(SettingsState(locale: state.locale, themeMode: state.themeMode, fontScale: nextScale));
+    emit(state.copyWith(fontScale: nextScale));
+  }
+
+  /// App-wide notifications toggle. Lives here (not in a per-screen cubit)
+  /// so the Settings drawer and the Profile screen always show the same
+  /// value — two separate local toggles would drift out of sync the moment
+  /// either one changed.
+  void toggleNotifications(bool value) {
+    emit(state.copyWith(notificationsEnabled: value));
   }
 }
