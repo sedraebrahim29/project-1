@@ -7,6 +7,13 @@ import '../../../../../../core/constants/app_strings.dart';
 import '../../../models/medical_record_models/comprehensive_history_models.dart';
 import '../../widgets/medical_records_widgets/comprehensive_history_widgets/history_section_tile_widget.dart';
 
+// =============================================
+// ⚠️ ملاحظة: هاي الشاشة صارت غير مستخدمة من MedicalOverviewScreen بعد
+// التعديل الجديد (التبويب صار محتوى داخلي عبر HistoryTabView بدل صفحة
+// منفصلة). خليناها موجودة تحسباً لأي مكان تاني بالمشروع (خارج هاد الملف
+// المرفق) لسا عم يفتحها مباشرة بـ Navigator.push. إذا ما في استخدام
+// تاني إلها، ممكن تحذفوها بأمان.
+// =============================================
 class ComprehensiveHistoryScreen extends StatefulWidget {
   const ComprehensiveHistoryScreen({super.key});
 
@@ -34,14 +41,16 @@ class _ComprehensiveHistoryScreenState
           const ConditionEntry(
             name: 'Hypertension',
             status: 'Active',
-            diagnosedYear: '2018',
+            metaLabel: 'Diagnosed',
+            metaValue: '2018',
             description:
             'Currently managed with Amlodipine 5mg daily. Blood pressure readings remain stable within target ranges during recent home monitoring.',
           ),
           const ConditionEntry(
             name: 'Type 2 Diabetes',
             status: 'Active',
-            diagnosedYear: '2020',
+            metaLabel: 'Diagnosed',
+            metaValue: '2020',
             description:
             'Diet-controlled with supplemental Metformin 500mg. Last HbA1c at 6.2% indicating good glycemic control.',
           ),

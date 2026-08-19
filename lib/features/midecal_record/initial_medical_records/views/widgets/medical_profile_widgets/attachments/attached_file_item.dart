@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../core/constants/setting.dart';
-import '../../../../models/medical_profile_models/attached_model.dart';
+import '../../../../models/attached_model.dart';
 
 // =============================================
 // Widget - صف الملف المرفق الواحد

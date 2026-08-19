@@ -3,10 +3,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/constants/app_strings.dart';
+import '../../data/departments_repository.dart';
+import '../../models/department_model.dart';
 import '../../view_models/register_cubit.dart';
+import '../../view_models/register_state.dart';
 
-class DoctorStepFiveWidget extends StatelessWidget {
+class DoctorStepFiveWidget extends StatefulWidget {
   const DoctorStepFiveWidget({super.key});
+
+  @override
+  State<DoctorStepFiveWidget> createState() => _DoctorStepFiveWidgetState();
+}
+
+class _DoctorStepFiveWidgetState extends State<DoctorStepFiveWidget> {
+  late final Future<List<DepartmentModel>> _departmentsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _departmentsFuture = DepartmentsRepository().getDepartments();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +32,9 @@ class DoctorStepFiveWidget extends StatelessWidget {
     return BlocBuilder<DoctorRegisterCubit, DoctorRegisterState>(
       builder: (context, state) {
         final m = state.model;
+        final fullName = "${m.firstName ?? ''} ${m.lastName ?? ''}".trim();
+        final mode = m.registrationMode ?? 'join_clinic';
+
         return SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
@@ -39,50 +58,86 @@ class DoctorStepFiveWidget extends StatelessWidget {
                 title: 'Account Information',
                 onEdit: () => cubit.jumpToStep(1),
                 items: {
-                  'Full Name': '${m.firstName} ${m.lastName}',
+                  'Full Name': fullName.isNotEmpty ? fullName : '—',
                   'Email': m.email ?? '—',
-                  'Prof. Email': m.professionalEmail ?? 'Not provided',
-                  'Phone': m.phoneNumber ?? '—',
+                  'ID Card Number': m.idCardNumber ?? '—',
+                  'Password': m.password != null ? '••••••••••••' : '—',
                 },
               ),
 
-              // Step 2: Personal & Specialties
+              // Step 3: Personal Info
               _buildReviewSection(
                 context,
-                title: 'Specialty & Details',
-                onEdit: () => cubit.jumpToStep(2),
+                title: 'Personal Information',
+                onEdit: () => cubit.jumpToStep(3),
                 items: {
                   'Birth Date': m.dateOfBirth ?? '—',
                   'Gender': m.gender ?? '—',
                   'Address': m.homeAddress ?? '—',
-                  'Specialty': '${m.mainSpecialty} / ${m.subSpecialty}',
+                  'Phone': m.phone ?? '—',
                 },
               ),
 
-              // Step 3: Documents
-              _buildReviewSection(
-                context,
-                title: 'Documents',
-                onEdit: () => cubit.jumpToStep(3),
-                items: {
-                  'Degree': m.educationDegree ?? '—',
-                  'License #': m.licenseNumber ?? '—',
-                  'Certificates': (m.universityDegreeImage != null && m.licenseImage != null) ? 'Uploaded' : 'Incomplete',
+              // Step 4: Specialty + Documents
+              FutureBuilder<List<DepartmentModel>>(
+                future: _departmentsFuture,
+                builder: (context, snapshot) {
+                  final allDepartments = snapshot.data ?? const [];
+                  final selectedNames = m.departmentIds
+                      .map((id) => allDepartments.firstWhere(
+                            (d) => d.id.toString() == id,
+                            orElse: () => DepartmentModel(id: 0, name: id),
+                          ).name)
+                      .toList();
+
+                  return _buildReviewSection(
+                    context,
+                    title: 'Specialty & Documents',
+                    onEdit: () => cubit.jumpToStep(4),
+                    items: {
+                      'Specialty': selectedNames.isNotEmpty ? selectedNames.join('، ') : '—',
+                      'Practice Start Date': m.practiceStartDate ?? '—',
+                      'National ID': m.idCardBytes != null ? 'Uploaded' : 'Missing',
+                      'Personal Photo': m.photoBytes != null ? 'Uploaded' : 'Missing',
+                      'Practice License': m.licenseBytes != null ? 'Uploaded' : 'Missing',
+                      'Certificates': m.certificatesBytes.isNotEmpty ? '${m.certificatesBytes.length} uploaded' : 'None',
+                    },
+                  );
                 },
               ),
 
-              // Step 4: Professional Info
+              // Step 5: Clinic Setup
               _buildReviewSection(
                 context,
-                title: 'Work & Experience',
-                onEdit: () => cubit.jumpToStep(4),
-                items: {
-                  'Workplaces': '${m.workplaces.length} added',
-                  'Experience': '${m.experienceYears ?? '0'} years',
-                  'Bio': m.bio != null && m.bio!.length > 20 ? '${m.bio!.substring(0, 20)}...' : (m.bio ?? '—'),
-                  'Online Consult': (m.offersOnlineConsultation ?? false) ? 'Enabled' : 'Disabled',
+                title: 'Clinic Setup',
+                onEdit: () => cubit.jumpToStep(5),
+                items: mode == 'join_clinic'
+                    ? {
+                  'Mode': 'Join Existing Clinic',
+                  'Clinic ID': m.clinicId ?? '—',
+                }
+                    : {
+                  'Mode': 'Create New Clinic',
+                  'Clinic Name': m.clinicName ?? '—',
+                  'Clinic Address': m.clinicAddress ?? '—',
+                  'Clinic Phone': m.clinicPhone ?? '—',
+                  'Clinic License': m.clinicLicenseBytes != null ? 'Uploaded' : 'Missing',
                 },
               ),
+
+              if (state is DoctorRegisterSubmitFailure) ...[
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(14.w),
+                  margin: EdgeInsets.only(bottom: 15.h),
+                  decoration: BoxDecoration(
+                    color: Colors.red.withOpacity(0.08),
+                    borderRadius: BorderRadius.circular(10.r),
+                    border: Border.all(color: Colors.red.withOpacity(0.3)),
+                  ),
+                  child: Text(state.errorMessage, style: TextStyle(color: Colors.red, fontSize: 13.sp)),
+                ),
+              ],
 
               SizedBox(height: 30.h),
             ],
@@ -92,7 +147,8 @@ class DoctorStepFiveWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildReviewSection(BuildContext context, {required String title, required VoidCallback onEdit, required Map<String, String> items}) {
+  Widget _buildReviewSection(BuildContext context,
+      {required String title, required VoidCallback onEdit, required Map<String, String> items}) {
     return Container(
       margin: EdgeInsets.only(bottom: 20.h),
       padding: EdgeInsets.all(16.w),

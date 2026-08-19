@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../../../core/constants/setting.dart';
-import '../../../../models/medical_profile_models/medical_history_models.dart';
+import '../../../../models/medical_history_models.dart';
 
 // =============================================
 // Widget - صف العنصر الواحد داخل القسم

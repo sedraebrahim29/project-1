@@ -16,7 +16,6 @@ class LoginScreen extends StatelessWidget {
 
     return Directionality(
       textDirection: isEn ? TextDirection.ltr : TextDirection.rtl,
-      // الـ BlocProvider يغلف الشاشة بالكامل هنا لحل خطأ الـ ProviderNotFound
       child: BlocProvider(
         create: (context) => LoginCubit(),
         child: BlocBuilder<SettingsCubit, SettingsState>(
@@ -45,7 +44,6 @@ class LoginScreen extends StatelessWidget {
                       ),
                       SizedBox(height: 5.h),
 
-                      // استدعاء الكارد المفصل
                       LoginCardWidgets(themeColor: themeColor, isEn: isEn),
 
                       SizedBox(height: 10.h),

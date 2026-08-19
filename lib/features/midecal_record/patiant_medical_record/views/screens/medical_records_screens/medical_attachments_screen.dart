@@ -14,6 +14,11 @@ import '../../widgets/medical_records_widgets/medical_attachments_widgets/prescr
 // تعرض: Medical Images + Lab Results + Prescriptions
 // تم التحديث لتتوافق مع الهوية البصرية الجديدة
 // =============================================
+// ⚠️ ملاحظة: هاي الشاشة صارت غير مستخدمة من MedicalOverviewScreen - تاب
+// "Attachments" الجديد (AttachmentsTabView) مبني على بيانات حقيقية من
+// الباك (type/mime_type/file_size فقط - بدون اسم دكتور واصف أو حالة
+// Active/Expired لأنها مو موجودة بالـ API). خليناها موجودة تحسباً لأي
+// مكان تاني عم يفتحها مباشرة؛ احذفوها بأمان إذا ما في استخدام تاني إلها.
 class MedicalAttachmentsScreen extends StatefulWidget {
   const MedicalAttachmentsScreen({super.key});
 

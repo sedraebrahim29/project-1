@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,7 +34,6 @@ class StepFourWidgets extends StatelessWidget {
               ),
               SizedBox(height: 25.h),
 
-              // 1. مراجعة بيانات الحساب (Step 1)
               _buildReviewCard(
                 context,
                 title: AppStrings.basicInfo(context),
@@ -43,71 +41,24 @@ class StepFourWidgets extends StatelessWidget {
                 items: {
                   AppStrings.fullName(context): fullName.isNotEmpty ? fullName : '—',
                   AppStrings.emailAddress(context): state.model.email ?? '—',
-                  AppStrings.phoneNumber(context): state.model.phoneNumber ?? '—',
+                  'ID Card Number': state.model.idCardNumber ?? '—',
                   AppStrings.password(context): state.model.password != null ? '••••••••••••' : '—',
                 },
               ),
 
-              // 2. مراجعة البيانات الشخصية والعنوان (Step 2)
               _buildReviewCard(
                 context,
                 title: AppStrings.personalDetails(context),
-                onEdit: () => cubit.jumpToStep(2),
+                onEdit: () => cubit.jumpToStep(3),
                 items: {
                   AppStrings.dateOfBirth(context): state.model.dateOfBirth ?? '—',
                   AppStrings.gender(context): state.model.gender ?? 'female',
                   'Home Address': state.model.homeAddress ?? '—',
+                  'Phone': state.model.phone ?? '—',
+                  'Blood Type': state.model.bloodType ?? '—',
                 },
               ),
 
-              // 3. مراجعة مستند الهوية المرفوع (Step 3) المعدل لمنع خطأ الويب
-              Container(
-                margin: EdgeInsets.only(bottom:20.h),
-                padding: EdgeInsets.all(16.w),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
-                  borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: Colors.grey.withOpacity(0.1)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(Icons.badge_outlined, size: 20.sp, color: AppColors.textLightGrey),
-                            SizedBox(width: 8.w),
-                            Text(AppStrings.identityVerificationTitle(context), style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.edit_outlined, size: 20.sp, color: AppColors.textLightGrey),
-                          onPressed: () => cubit.jumpToStep(3),
-                        ),
-                      ],
-                    ),
-                    Divider(height: 15.h),
-                    state.model.webImageBytes != null
-                        ? ClipRRect(
-                      borderRadius: BorderRadius.circular(8.r),
-                      child: Image.memory(
-                        state.model.webImageBytes!, // استخدام البايتات لعرض آمن على الويب والموبايل معاً
-                        width: double.infinity,
-                        height: 130.h,
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                        : Text(
-                      'No document uploaded / لم يتم رفع مستند',
-                      style: TextStyle(fontSize: 13.sp, color: Colors.red.shade400, fontWeight: FontWeight.w500),
-                    ),
-                  ],
-                ),
-              ),
-
-              // 4. ملاحظة الخصوصية والشروط
               Container(
                 padding: EdgeInsets.all(16.w),
                 decoration: BoxDecoration(

@@ -1,31 +1,60 @@
-part of 'register_cubit.dart';
+import '../models/register_model.dart';
 
-enum DoctorRegisterStatus { initial, loading, success, failure }
-
-class DoctorRegisterState {
+abstract class DoctorRegisterState {
   final int currentStep;
-  final DoctorRegisterStatus status;
   final DoctorRegisterModel model;
-  final String? errorMessage;
 
   const DoctorRegisterState({
-    this.currentStep = 1,
-    this.status = DoctorRegisterStatus.initial,
+    required this.currentStep,
     required this.model,
-    this.errorMessage,
+  });
+}
+
+class DoctorRegisterInitial extends DoctorRegisterState {
+  DoctorRegisterInitial()
+      : super(
+    currentStep: 1,
+    model: DoctorRegisterModel(gender: 'male', registrationMode: 'join_clinic'),
+  );
+}
+
+class DoctorRegisterStepChanged extends DoctorRegisterState {
+  const DoctorRegisterStepChanged({
+    required super.currentStep,
+    required super.model,
   });
 
-  DoctorRegisterState copyWith({
+  DoctorRegisterStepChanged copyWith({
     int? currentStep,
-    DoctorRegisterStatus? status,
     DoctorRegisterModel? model,
-    String? errorMessage,
   }) {
-    return DoctorRegisterState(
+    return DoctorRegisterStepChanged(
       currentStep: currentStep ?? this.currentStep,
-      status: status ?? this.status,
       model: model ?? this.model,
-      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
+}
+
+class DoctorRegisterStepSubmitting extends DoctorRegisterState {
+  const DoctorRegisterStepSubmitting({
+    required super.currentStep,
+    required super.model,
+  });
+}
+
+class DoctorRegisterSubmitSuccess extends DoctorRegisterState {
+  const DoctorRegisterSubmitSuccess({
+    required super.currentStep,
+    required super.model,
+  });
+}
+
+
+class DoctorRegisterSubmitFailure extends DoctorRegisterState {
+  final String errorMessage;
+  const DoctorRegisterSubmitFailure({
+    required super.currentStep,
+    required super.model,
+    required this.errorMessage,
+  });
 }

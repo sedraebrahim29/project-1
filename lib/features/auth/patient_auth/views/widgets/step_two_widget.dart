@@ -3,8 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/theme/app_colors.dart';
 import '../../../../../core/constants/app_strings.dart';
+import '../../../../../core/widgets/location_pick_field.dart';
 import '../../view_models/register_cubit.dart';
 import '../../view_models/register_state.dart';
+
+String? _fieldError(Map<String, dynamic>? errors, String key) {
+  final value = errors?[key];
+  if (value is List && value.isNotEmpty) return value.first.toString();
+  if (value is String) return value;
+  return null;
+}
+
 class StepTwoWidgets extends StatelessWidget {
   const StepTwoWidgets({super.key});
 
@@ -15,8 +24,8 @@ class StepTwoWidgets extends StatelessWidget {
 
     return BlocBuilder<RegisterCubit, RegisterState>(
       builder: (context, state) {
-        // إذا كان الجنس لم يحدد بعد، نضع القيمة الافتراضية 'female' داخل الموديل
         final currentGender = state.model.gender ?? 'female';
+        final fieldErrors = state is RegisterSubmitFailure ? state.fieldErrors : null;
 
         return SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -35,7 +44,7 @@ class StepTwoWidgets extends StatelessWidget {
               ),
               SizedBox(height: 25.h),
 
-              // 1. حقل تاريخ الميلاد
+              // 1. تاريخ الميلاد
               Text(AppStrings.dateOfBirth(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
               SizedBox(height: 6.h),
               TextFormField(
@@ -45,6 +54,7 @@ class StepTwoWidgets extends StatelessWidget {
                 decoration: InputDecoration(
                   hintText: AppStrings.dateOfBirthHint(context),
                   prefixIcon: const Icon(Icons.calendar_today_outlined),
+                  errorText: _fieldError(fieldErrors, 'dob'),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                 ),
                 onTap: () async {
@@ -55,14 +65,14 @@ class StepTwoWidgets extends StatelessWidget {
                     lastDate: DateTime.now(),
                   );
                   if (pickedDate != null) {
-                    final formattedDate = "${pickedDate.month}/${pickedDate.day}/${pickedDate.year}";
+                    final formattedDate = "${pickedDate.year}-${pickedDate.month.toString().padLeft(2, '0')}-${pickedDate.day.toString().padLeft(2, '0')}";
                     cubit.updateRegisterModel(state.model.copyWith(dateOfBirth: formattedDate));
                   }
                 },
               ),
               SizedBox(height: 20.h),
 
-              // 2. اختيار الجنس
+              // 2. الجنس
               Text(AppStrings.gender(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
               SizedBox(height: 8.h),
               Container(
@@ -75,25 +85,72 @@ class StepTwoWidgets extends StatelessWidget {
                   children: [
                     _buildGenderButton(context, cubit, state, currentGender, value: 'male', label: AppStrings.male(context)),
                     _buildGenderButton(context, cubit, state, currentGender, value: 'female', label: AppStrings.female(context)),
-                    _buildGenderButton(context, cubit, state, currentGender, value: 'other', label: 'Other'),
                   ],
                 ),
               ),
               SizedBox(height: 20.h),
 
-              // 3. حقل العنوان الممتد (Home Address)
-              Text('Home Address', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
+              // 3. حقل العنوان الموحد (Address)
+              Text('Address', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
               SizedBox(height: 6.h),
               TextFormField(
                 initialValue: state.model.homeAddress,
-                maxLines: 4,
+                maxLines: 2,
                 decoration: InputDecoration(
-                  hintText: 'Enter your full home address',
+                  hintText: 'Enter your full address',
+                  errorText: _fieldError(fieldErrors, 'address'),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                   contentPadding: EdgeInsets.all(12.w),
                 ),
                 onChanged: (value) {
                   cubit.updateRegisterModel(state.model.copyWith(homeAddress: value));
+                },
+              ),
+              LocationPickField(
+                latitude: state.model.latitude,
+                longitude: state.model.longitude,
+                onPicked: (lat, lng) => cubit.updateRegisterModel(
+                  state.model.copyWith(latitude: lat, longitude: lng),
+                ),
+              ),
+              SizedBox(height: 20.h),
+
+              // 4. حقل رقم الهاتف - مطلوب من الباك اند بالـ complete-profile
+              Text('Phone', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
+              SizedBox(height: 6.h),
+              TextFormField(
+                initialValue: state.model.phone,
+                keyboardType: TextInputType.phone,
+                decoration: InputDecoration(
+                  hintText: 'Enter your phone number',
+                  prefixIcon: const Icon(Icons.phone_outlined),
+                  errorText: _fieldError(fieldErrors, 'phone'),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+                ),
+                onChanged: (value) {
+                  cubit.updateRegisterModel(state.model.copyWith(phone: value));
+                },
+              ),
+              SizedBox(height: 20.h),
+
+              // 5. فصيلة الدم - مطلوبة من الباك اند بالـ complete-profile (blood_type)
+              Text('Blood Type', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
+              SizedBox(height: 6.h),
+              DropdownButtonFormField<String>(
+                value: state.model.bloodType,
+                decoration: InputDecoration(
+                  hintText: 'Select your blood type',
+                  prefixIcon: const Icon(Icons.bloodtype_outlined),
+                  errorText: _fieldError(fieldErrors, 'blood_type'),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                  contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                ),
+                items: const [
+                  'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-',
+                ].map((type) => DropdownMenuItem(value: type, child: Text(type))).toList(),
+                onChanged: (value) {
+                  cubit.updateRegisterModel(state.model.copyWith(bloodType: value));
                 },
               ),
               SizedBox(height: 20.h),

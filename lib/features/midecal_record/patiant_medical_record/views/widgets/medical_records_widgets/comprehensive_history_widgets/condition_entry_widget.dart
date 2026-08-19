@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../../../../../../../core/constants/app_strings.dart';
 import '../../../../../../../core/theme/app_colors.dart';
 import '../../../../models/medical_record_models/comprehensive_history_models.dart';
 
 // =============================================
 // Widget - عنصر الحالة المرضية الواحدة
-// اسم + badge Active + DIAGNOSED: XXXX + وصف
+// اسم + badge اختياري + سطر meta (Diagnosed/Surgery date/Reaction/
+// Relation حسب القسم) + وصف. الـ label بقى ديناميكي بدل "DIAGNOSED"
+// ثابتة (كانت غلط لغوياً بقسم Surgeries/Allergies/Family History).
 // =============================================
 class ConditionEntryWidget extends StatelessWidget {
   final ConditionEntry entry;
@@ -29,72 +30,71 @@ class ConditionEntryWidget extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // --- صف الاسم + badge ---
+              // --- صف الاسم + badge (اختياري) ---
               Row(
                 children: [
-                  Text(
-                    entry.name,
-                    style: TextStyle(
-                      color: isDarkMode ? AppColors.darkText : AppColors.textDark,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-
-                  // badge "Active" أو حالة المرض — متناسقة تماماً مع الثيم الجديد
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: isDarkMode ? AppColors.darkBackground : AppColors.borderGrey,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
+                  Expanded(
                     child: Text(
-                      entry.status,
+                      entry.name,
                       style: TextStyle(
-                        color: isDarkMode ? AppColors.darkText.withOpacity(0.8) : AppColors.textLightGrey,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
+                        color: isDarkMode ? AppColors.darkText : AppColors.textDark,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
+                  if (entry.status != null && entry.status!.isNotEmpty) ...[
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: isDarkMode ? AppColors.darkBackground : AppColors.borderGrey,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        entry.status!,
+                        style: TextStyle(
+                          color: isDarkMode ? AppColors.darkText.withOpacity(0.8) : AppColors.textLightGrey,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
               ),
 
               const SizedBox(height: 4),
 
-              // --- DIAGNOSED: XXXX — أحرف مأخوذة ديناميكياً من ملف الترجمة الخاص بكِ ---
-              Text(
-                '${AppStrings.diagnosed(context)}: ${entry.diagnosedYear}',
-                style: TextStyle(
-                  color: isDarkMode ? AppColors.darkText.withOpacity(0.5) : AppColors.textLightGrey,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.5,
+              // --- سطر الـ meta: label ديناميكي حسب نوع القسم ---
+              if (entry.metaValue.isNotEmpty)
+                Text(
+                  '${entry.metaLabel}: ${entry.metaValue}',
+                  style: TextStyle(
+                    color: isDarkMode ? AppColors.darkText.withOpacity(0.5) : AppColors.textLightGrey,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.5,
+                  ),
                 ),
-              ),
 
-              const SizedBox(height: 6),
-
-              // --- نص الوصف التفصيلي ---
-              Text(
-                entry.description,
-                style: TextStyle(
-                  color: isDarkMode ? AppColors.darkText.withOpacity(0.7) : AppColors.textLightGrey,
-                  fontSize: 13,
-                  height: 1.5,
+              if (entry.description.isNotEmpty) ...[
+                const SizedBox(height: 6),
+                Text(
+                  entry.description,
+                  style: TextStyle(
+                    color: isDarkMode ? AppColors.darkText.withOpacity(0.7) : AppColors.textLightGrey,
+                    fontSize: 13,
+                    height: 1.5,
+                  ),
                 ),
-              ),
+              ],
             ],
           ),
         ),
 
-        // خط فاصل بين الحالات — لا يظهر بعد الأخيرة ويتغير لونه حسب وضع الثيم
         if (showDivider)
-          Divider(
-              height: 1,
-              color: isDarkMode ? AppColors.darkBackground : AppColors.borderGrey
-          ),
+          Divider(height: 1, color: isDarkMode ? AppColors.darkBackground : AppColors.borderGrey),
       ],
     );
   }

@@ -5,7 +5,7 @@ import '../../../../../../../core/constants/app_strings.dart';
 import '../../../../models/medical_record_models/dashboard_overview_models.dart';
 
 // =============================================
-// Widget - كارد Active Medications
+// Widget - كارد Active Medications (يدعم الثيمين)
 // =============================================
 class ActiveMedicationsCard extends StatelessWidget {
   final ActiveMedicationsData data;
@@ -19,10 +19,19 @@ class ActiveMedicationsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    final cardBgColor = isDarkMode ? const Color(0xFF1B3D2B) : const Color(0xFFD0EDD9);
+    final primaryGreen = isDarkMode ? AppColors.darkPrimaryGreen : AppColors.primaryGreen;
+    final textColor = isDarkMode ? AppColors.darkText : AppColors.textDark;
+    final subTextColor = isDarkMode ? AppColors.darkText.withOpacity(0.6) : AppColors.textLightGrey;
+    final buttonBg = isDarkMode ? AppColors.darkCard : AppColors.white;
+    final buttonBorder = isDarkMode ? Colors.white10 : AppColors.borderGrey;
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xFFD0EDD9), // Light mint green as per Figma
+        color: cardBgColor,
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Stack(
@@ -33,7 +42,7 @@ class ActiveMedicationsCard extends StatelessWidget {
             child: Icon(
               Icons.add_box_outlined,
               size: 52.sp,
-              color: AppColors.primaryGreen.withOpacity(0.15),
+              color: primaryGreen.withOpacity(0.12),
             ),
           ),
           Padding(
@@ -45,14 +54,14 @@ class ActiveMedicationsCard extends StatelessWidget {
                   width: 40.w,
                   height: 40.h,
                   decoration: BoxDecoration(
-                    color: AppColors.white.withOpacity(0.6),
+                    color: isDarkMode ? Colors.black : AppColors.white.withOpacity(0.6),
                     borderRadius: BorderRadius.circular(8.r),
                   ),
                   child: Center(
                     child: Icon(
                       Icons.medication_outlined,
                       size: 22.sp,
-                      color: AppColors.primaryGreen,
+                      color: primaryGreen,
                     ),
                   ),
                 ),
@@ -60,7 +69,7 @@ class ActiveMedicationsCard extends StatelessWidget {
                 Text(
                   AppStrings.activeMedications(context),
                   style: TextStyle(
-                    color: AppColors.textDark,
+                    color: textColor,
                     fontSize: 16.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -69,7 +78,7 @@ class ActiveMedicationsCard extends StatelessWidget {
                 Text(
                   '${data.count} ${AppStrings.currentPrescriptions(context)}',
                   style: TextStyle(
-                    color: AppColors.textLightGrey,
+                    color: subTextColor,
                     fontSize: 13.sp,
                   ),
                 ),
@@ -79,26 +88,19 @@ class ActiveMedicationsCard extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                     decoration: BoxDecoration(
-                      color: AppColors.white,
+                      color: buttonBg,
                       borderRadius: BorderRadius.circular(8.r),
-                      border: Border.all(
-                        color: AppColors.borderGrey,
-                        width: 1.w,
-                      ),
+                      border: Border.all(color: buttonBorder, width: 1.w),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           AppStrings.manage(context),
-                          style: TextStyle(
-                            color: AppColors.textDark,
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: TextStyle(color: textColor, fontSize: 13.sp, fontWeight: FontWeight.w500),
                         ),
                         SizedBox(width: 4.w),
-                        Icon(Icons.arrow_forward, size: 14.sp, color: AppColors.textDark),
+                        Icon(Icons.arrow_forward, size: 14.sp, color: textColor),
                       ],
                     ),
                   ),
@@ -113,116 +115,94 @@ class ActiveMedicationsCard extends StatelessWidget {
 }
 
 // =============================================
-// Widget - كارد Latest Vitals
+// Widget - كارد ملخص السجل (يحل محل Latest Vitals القديم)
+// مبني بالكامل من عدّادات حقيقية (allergies/conditions/medications/
+// attachments) بدل علامات حيوية وهمية لا يوجد لها endpoint حالياً.
 // =============================================
-class LatestVitalsCard extends StatelessWidget {
-  final LatestVitalsData data;
-  final VoidCallback onViewTrends;
+class RecordSummaryCard extends StatelessWidget {
+  final RecordSummaryData data;
 
-  const LatestVitalsCard({
-    super.key,
-    required this.data,
-    required this.onViewTrends,
-  });
+  const RecordSummaryCard({super.key, required this.data});
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
+    final cardBgColor = isDarkMode ? AppColors.darkCard : AppColors.white;
+    final textColor = isDarkMode ? AppColors.darkText : AppColors.textDark;
+    final subTextColor = isDarkMode ? AppColors.darkText.withOpacity(0.6) : AppColors.textLightGrey;
+    final iconContainerBg = isDarkMode ? AppColors.darkBackground : AppColors.backgroundBeige;
+
+    final stats = <_Stat>[
+      _Stat(Icons.monitor_heart_outlined, data.conditionsCount, AppStrings.chronicDiseases(context)),
+      _Stat(Icons.masks_outlined, data.allergiesCount, AppStrings.allergies(context)),
+      _Stat(Icons.medication_outlined, data.medicationsCount, AppStrings.medications(context)),
+      _Stat(Icons.attach_file, data.attachmentsCount, AppStrings.attachments(context)),
+    ];
+
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: cardBgColor,
         borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: isDarkMode ? Colors.black.withOpacity(0.2) : Colors.black.withOpacity(0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: Stack(
+      padding: EdgeInsets.all(16.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Positioned(
-            right: 16.w,
-            top: 12.h,
-            child: Icon(
-              Icons.monitor_heart_outlined,
-              size: 52.sp,
-              color: AppColors.textLightGrey.withOpacity(0.1),
-            ),
+          Text(
+            AppStrings.recordSummary(context),
+            style: TextStyle(color: textColor, fontSize: 16.sp, fontWeight: FontWeight.bold),
           ),
-          Padding(
-            padding: EdgeInsets.all(16.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 40.w,
-                  height: 40.h,
-                  decoration: BoxDecoration(
-                    color: AppColors.backgroundBeige,
-                    borderRadius: BorderRadius.circular(8.r),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      Icons.monitor_heart_outlined,
-                      size: 22.sp,
-                      color: AppColors.textDark,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 12.h),
-                Text(
-                  AppStrings.latestVitals(context),
-                  style: TextStyle(
-                    color: AppColors.textDark,
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SizedBox(height: 4.h),
-                Text(
-                  'BP: ${data.bp}, HR: ${data.hr}',
-                  style: TextStyle(
-                    color: AppColors.textLightGrey,
-                    fontSize: 13.sp,
-                  ),
-                ),
-                SizedBox(height: 14.h),
-                GestureDetector(
-                  onTap: onViewTrends,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.circular(8.r),
-                      border: Border.all(
-                        color: AppColors.borderGrey,
-                        width: 1.w,
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          AppStrings.viewTrends(context),
-                          style: TextStyle(
-                            color: AppColors.textDark,
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w500,
+          SizedBox(height: 14.h),
+          Row(
+            children: stats
+                .map((s) => Expanded(
+                      child: Column(
+                        children: [
+                          Container(
+                            width: 40.w,
+                            height: 40.h,
+                            decoration: BoxDecoration(
+                              color: iconContainerBg,
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                            child: Center(child: Icon(s.icon, size: 20.sp, color: textColor)),
                           ),
-                        ),
-                        SizedBox(width: 4.w),
-                        Icon(Icons.open_in_new, size: 14.sp, color: AppColors.textDark),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+                          SizedBox(height: 6.h),
+                          Text(
+                            '${s.count}',
+                            style: TextStyle(color: textColor, fontSize: 16.sp, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 2.h),
+                          Text(
+                            s.label,
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(color: subTextColor, fontSize: 10.sp),
+                          ),
+                        ],
+                      ),
+                    ))
+                .toList(),
           ),
         ],
       ),
     );
   }
+}
+
+class _Stat {
+  final IconData icon;
+  final int count;
+  final String label;
+  const _Stat(this.icon, this.count, this.label);
 }
