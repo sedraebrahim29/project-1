@@ -7,17 +7,24 @@ import '../../../core/theme/app_colors.dart';
 import '../models/patient_profile_dummy_data.dart';
 import '../view_models/doctor_listing_cubit.dart';
 import '../view_models/doctor_listing_state.dart';
+<<<<<<< HEAD
 import 'patient_profile_screen.dart';
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 import 'widgets/home_doctor_tile.dart';
 import 'widgets/home_specialty_chip.dart';
 
 class PatientHomeScreen extends StatelessWidget {
+<<<<<<< HEAD
   /// user object الحقيقي من data.user برد /auth/login - لو انمرر،
   /// الترحيب وصورة البروفايل بيعرضوا اسم المريض الحقيقي والنقر عليها
   /// بيوديه لبروفايله الحقيقي بدل dummyPatientProfile.
   final Map<String, dynamic>? currentUserJson;
 
   const PatientHomeScreen({super.key, this.currentUserJson});
+=======
+  const PatientHomeScreen({super.key});
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +42,13 @@ class PatientHomeScreen extends StatelessWidget {
     final primaryGreen = isDark ? AppColors.darkPrimaryGreen : AppColors.primaryGreen;
     final cardBg = isDark ? AppColors.darkCard : AppColors.white;
 
+<<<<<<< HEAD
     final profile = currentUserJson != null
         ? PatientProfileModel.fromUserJson(currentUserJson!)
         : dummyPatientProfile;
 
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
     final hour = TimeOfDay.now().hour;
     final greeting = hour < 12
         ? AppStrings.goodMorning(context)
@@ -58,6 +68,7 @@ class PatientHomeScreen extends StatelessWidget {
             // --- الترحيب ---
             Row(
               children: [
+<<<<<<< HEAD
                 GestureDetector(
                   onTap: () => Navigator.push(
                     context,
@@ -72,13 +83,23 @@ class PatientHomeScreen extends StatelessWidget {
                         ? null
                         : Icon(Icons.person_outline, color: primaryGreen, size: 22.sp),
                   ),
+=======
+                CircleAvatar(
+                  radius: 20.r,
+                  backgroundColor: primaryGreen.withOpacity(0.15),
+                  child: Icon(Icons.person_outline, color: primaryGreen, size: 22.sp),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                 ),
                 SizedBox(width: 10.w),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(greeting, style: TextStyle(fontSize: greetingSize, color: AppColors.textLightGrey, fontWeight: FontWeight.w500)),
+<<<<<<< HEAD
                     Text(profile.firstName, style: TextStyle(fontSize: nameSize, fontWeight: FontWeight.w800, color: primaryGreen)),
+=======
+                    Text(dummyPatientProfile.firstName, style: TextStyle(fontSize: nameSize, fontWeight: FontWeight.w800, color: primaryGreen)),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                   ],
                 ),
                 const Spacer(),
@@ -200,6 +221,7 @@ class PatientHomeScreen extends StatelessWidget {
             // --- أطباء بالقرب منك ---
             Text(AppStrings.doctorsNearYou(context), style: TextStyle(fontSize: sectionSize, fontWeight: FontWeight.w700, color: textColor)),
             SizedBox(height: 12.h),
+<<<<<<< HEAD
             if (nearby.isEmpty)
               Container(
                 width: double.infinity,
@@ -216,6 +238,13 @@ class PatientHomeScreen extends StatelessWidget {
                     onToggleFav: () => cubit.toggleFavourite(doc.id),
                     onBook: () => cubit.changeTab(2),
                   )),
+=======
+            ...nearby.map((doc) => HomeDoctorTile(
+                  doc: doc,
+                  onToggleFav: () => cubit.toggleFavourite(doc.id),
+                  onBook: () => cubit.changeTab(2),
+                )),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
           ],
         );
       },

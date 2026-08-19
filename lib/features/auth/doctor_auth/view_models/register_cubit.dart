@@ -55,6 +55,7 @@ class DoctorRegisterCubit extends Cubit<DoctorRegisterState> {
         }
         break;
       case 3:
+<<<<<<< HEAD
         _moveToNextStepLocally();
         break;
       case 4:
@@ -71,6 +72,9 @@ class DoctorRegisterCubit extends Cubit<DoctorRegisterState> {
         }
         _moveToNextStepLocally();
         break;
+=======
+      case 4:
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
       case 5:
         _moveToNextStepLocally();
         break;
@@ -205,10 +209,13 @@ class DoctorRegisterCubit extends Cubit<DoctorRegisterState> {
         'gender': model.gender,
         'dob': model.dateOfBirth,
         'address': model.homeAddress,
+<<<<<<< HEAD
         // lat/lng: مضافة حديثاً (تحديد الموقع من خريطة حقيقية) - راجع
         // نفس ملاحظة patient register_cubit.dart بخصوص تأكيد الباك.
         if (model.latitude != null) 'latitude': model.latitude,
         if (model.longitude != null) 'longitude': model.longitude,
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
         'registration_mode': model.registrationMode,
         // مضافة: كانت مفقودة بالكامل بالكود القديم رغم إنها مطلوبة من
         // الباك بكلا وضعي join_clinic/create_clinic (شفناها بالـ Postman
@@ -254,6 +261,7 @@ class DoctorRegisterCubit extends Cubit<DoctorRegisterState> {
       }
 
       if (model.registrationMode == 'join_clinic') {
+<<<<<<< HEAD
         // ⚠️ 19/8: نفس تغيير POST /doctor/profile/clinics/join - الباك
         // عدّل اسم الحقل من clinic_id لـ clinic_code (القيمة المرسلة
         // نفسها لسا رقم العيادة id، بس اسم الحقل تغيّر).
@@ -269,6 +277,12 @@ class DoctorRegisterCubit extends Cubit<DoctorRegisterState> {
         if (model.clinicLatitude != null) fields['latitude'] = model.clinicLatitude;
         if (model.clinicLongitude != null) fields['longitude'] = model.clinicLongitude;
         if (model.consultationFee != null) fields['consultation_fee'] = model.consultationFee;
+=======
+        fields['clinic_id'] = model.clinicId;
+      } else if (model.registrationMode == 'create_clinic') {
+        fields['clinic_name'] = model.clinicName;
+        fields['clinic_address'] = model.clinicAddress;
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
         fields['clinic_phone'] = model.clinicPhone;
         if (model.clinicLicenseBytes != null) {
           fields['clinic_license_file'] = MultipartFile.fromBytes(

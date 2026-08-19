@@ -5,6 +5,7 @@ import 'package:untitled3/core/constants/setting.dart';
 import 'package:untitled3/features/patient_details/views/widgets/settings_drawer_widget.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/constants/app_strings.dart';
+<<<<<<< HEAD
 import '../../../core/cubits/medical_record_status_cubit.dart';
 import '../../midecal_record/patiant_medical_record/views/screens/medical_records_screens/medical_overview_screen.dart';
 import 'widgets/custom_bottom_nav_bar.dart';
@@ -23,6 +24,18 @@ class MainLayoutScreen extends StatelessWidget {
   final Map<String, dynamic>? currentUserJson;
 
   const MainLayoutScreen({super.key, this.currentUserJson});
+=======
+import '../../midecal_record/patiant_medical_record/views/screens/medical_records_screens/medical_overview_screen.dart';
+import '../models/doctor_dummy_data.dart';
+import '../view_models/doctor_listing_cubit.dart';
+import '../view_models/doctor_listing_state.dart';
+import 'widgets/custom_bottom_nav_bar.dart';
+import 'doctor_listing_screen.dart';
+import 'patient_home_screen.dart';
+
+class MainLayoutScreen extends StatelessWidget {
+  const MainLayoutScreen({super.key});
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 
   @override
   Widget build(BuildContext context) {
@@ -46,6 +59,7 @@ class MainLayoutScreen extends StatelessWidget {
 
     return Directionality(
       textDirection: isEn ? TextDirection.ltr : TextDirection.rtl,
+<<<<<<< HEAD
       child: MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => DoctorListingCubit(const [])..loadDoctors()),
@@ -64,6 +78,13 @@ class MainLayoutScreen extends StatelessWidget {
           builder: (context, state) {
             final cubit = context.read<DoctorListingCubit>();
             final hasMedicalRecord = context.watch<MedicalRecordStatusCubit>().state;
+=======
+      child: BlocProvider(
+        create: (context) => DoctorListingCubit(dummyDoctors),
+        child: BlocBuilder<DoctorListingCubit, DoctorListingState>(
+          builder: (context, state) {
+            final cubit = context.read<DoctorListingCubit>();
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 
             return Scaffold(
               backgroundColor: scaffoldBg,
@@ -76,6 +97,7 @@ class MainLayoutScreen extends StatelessWidget {
                 titleSpacing: 16.w,
                 title: Row(
                   children: [
+<<<<<<< HEAD
                     GestureDetector(
                       onTap: () {
                         if (currentUserJson == null) return;
@@ -93,6 +115,12 @@ class MainLayoutScreen extends StatelessWidget {
                         backgroundColor: primaryGreenColor.withOpacity(0.15),
                         child: Icon(Icons.person_outline, color: primaryGreenColor, size: 20.sp),
                       ),
+=======
+                    CircleAvatar(
+                      radius: 18.r,
+                      backgroundColor: primaryGreenColor.withOpacity(0.15),
+                      child: Icon(Icons.person_outline, color: primaryGreenColor, size: 20.sp),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                     ),
                     SizedBox(width: 10.w),
                     Text(
@@ -144,6 +172,7 @@ class MainLayoutScreen extends StatelessWidget {
               body: IndexedStack(
                 index: state.currentIndex,
                 children: [
+<<<<<<< HEAD
                   PatientHomeScreen(currentUserJson: currentUserJson),
                   const DoctorListingScreen(),
                   Center(child: Text('Bookings Screen', style: TextStyle(color: textColor))),
@@ -165,6 +194,13 @@ class MainLayoutScreen extends StatelessWidget {
                               ),
                             ),
                   ),
+=======
+                  const PatientHomeScreen(),
+                  const DoctorListingScreen(),
+                  Center(child: Text('Bookings Screen', style: TextStyle(color: textColor))),
+                  Center(child: Text('Chat Screen', style: TextStyle(color: textColor))),
+                  const MedicalOverviewScreen(),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                 ],
               ),
             );

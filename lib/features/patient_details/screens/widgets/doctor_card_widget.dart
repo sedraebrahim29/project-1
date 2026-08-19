@@ -5,8 +5,11 @@ import 'package:untitled3/core/constants/setting.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../models/doctor_dummy_data.dart';
+<<<<<<< HEAD
 import '../../view_models/doctor_listing_cubit.dart';
 import '../../../../core/cubits/medical_record_status_cubit.dart';
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 import '../doctor_profile_screen.dart';
 
 class DoctorCardWidget extends StatelessWidget {
@@ -139,6 +142,7 @@ class DoctorCardWidget extends StatelessWidget {
             height: 38.h,
             child: ElevatedButton(
               onPressed: () {
+<<<<<<< HEAD
                 // ⚠️ 19/8: DoctorProfileScreen بيحتاج MedicalRecordStatusCubit
                 // و DoctorListingCubit (متوفرين فقط جوا MainLayoutScreen عبر
                 // MultiBlocProvider) - لو فتحناها بـ Navigator.push عادي
@@ -157,6 +161,12 @@ class DoctorCardWidget extends StatelessWidget {
                       ],
                       child: DoctorProfileScreen(doctor: doc),
                     ),
+=======
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DoctorProfileScreen(doctor: doc),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                   ),
                 );
               },

@@ -25,6 +25,7 @@ class ApiConstants {
   static const String medicalRecordFamilyHistory = '$medicalRecordBase/family-history';
   static const String medicalRecordMedications = '$medicalRecordBase/medications';
   static const String medicalRecordAttachments = '$medicalRecordBase/attachments';
+<<<<<<< HEAD
 
   // --- Doctor ---
   static const String doctorProfile = '/doctor/profile';
@@ -61,4 +62,6 @@ class ApiConstants {
   // --- Clinics / Departments (public) ---
   static const String clinics = '/clinics';
   static const String departments = '/departments';
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 }

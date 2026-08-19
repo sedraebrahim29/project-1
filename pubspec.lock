@@ -333,6 +333,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "11.0.0"
+<<<<<<< HEAD
   geolocator:
     dependency: "direct main"
     description:
@@ -381,6 +382,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.5"
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
   get:
     dependency: "direct main"
     description:
@@ -501,6 +504,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
+<<<<<<< HEAD
   latlong2:
     dependency: "direct main"
     description:
@@ -509,6 +513,8 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.1"
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
   leak_tracker:
     dependency: transitive
     description:

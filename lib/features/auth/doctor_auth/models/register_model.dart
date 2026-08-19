@@ -16,6 +16,7 @@ class DoctorRegisterModel {
   final String? dateOfBirth;
   final String? gender;
   final String? homeAddress;
+<<<<<<< HEAD
   final double? latitude;
   final double? longitude;
 
@@ -25,6 +26,15 @@ class DoctorRegisterModel {
   final XFile? photoImage;
   final Uint8List? photoBytes;
 
+=======
+
+  final XFile? idCardImage;
+  final Uint8List? idCardBytes;
+
+  final XFile? photoImage;
+  final Uint8List? photoBytes;
+
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
   final XFile? licenseImage;
   final Uint8List? licenseBytes;
 
@@ -36,10 +46,14 @@ class DoctorRegisterModel {
 
   final String? clinicName;
   final String? clinicAddress;
+<<<<<<< HEAD
   final double? clinicLatitude;
   final double? clinicLongitude;
   final String? clinicPhone;
   final String? consultationFee;
+=======
+  final String? clinicPhone;
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
   final XFile? clinicLicenseImage;
   final Uint8List? clinicLicenseBytes;
 
@@ -62,8 +76,11 @@ class DoctorRegisterModel {
     this.dateOfBirth,
     this.gender,
     this.homeAddress,
+<<<<<<< HEAD
     this.latitude,
     this.longitude,
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
     this.idCardImage,
     this.idCardBytes,
     this.photoImage,
@@ -76,10 +93,14 @@ class DoctorRegisterModel {
     this.clinicId,
     this.clinicName,
     this.clinicAddress,
+<<<<<<< HEAD
     this.clinicLatitude,
     this.clinicLongitude,
     this.clinicPhone,
     this.consultationFee,
+=======
+    this.clinicPhone,
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
     this.clinicLicenseImage,
     this.clinicLicenseBytes,
     this.departmentIds = const [],
@@ -98,8 +119,11 @@ class DoctorRegisterModel {
     String? dateOfBirth,
     String? gender,
     String? homeAddress,
+<<<<<<< HEAD
     double? latitude,
     double? longitude,
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
     XFile? idCardImage,
     Uint8List? idCardBytes,
     XFile? photoImage,
@@ -112,10 +136,14 @@ class DoctorRegisterModel {
     String? clinicId,
     String? clinicName,
     String? clinicAddress,
+<<<<<<< HEAD
     double? clinicLatitude,
     double? clinicLongitude,
     String? clinicPhone,
     String? consultationFee,
+=======
+    String? clinicPhone,
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
     XFile? clinicLicenseImage,
     Uint8List? clinicLicenseBytes,
     List<String>? departmentIds,
@@ -133,8 +161,11 @@ class DoctorRegisterModel {
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       gender: gender ?? this.gender,
       homeAddress: homeAddress ?? this.homeAddress,
+<<<<<<< HEAD
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
       idCardImage: idCardImage ?? this.idCardImage,
       idCardBytes: idCardBytes ?? this.idCardBytes,
       photoImage: photoImage ?? this.photoImage,
@@ -147,10 +178,14 @@ class DoctorRegisterModel {
       clinicId: clinicId ?? this.clinicId,
       clinicName: clinicName ?? this.clinicName,
       clinicAddress: clinicAddress ?? this.clinicAddress,
+<<<<<<< HEAD
       clinicLatitude: clinicLatitude ?? this.clinicLatitude,
       clinicLongitude: clinicLongitude ?? this.clinicLongitude,
       clinicPhone: clinicPhone ?? this.clinicPhone,
       consultationFee: consultationFee ?? this.consultationFee,
+=======
+      clinicPhone: clinicPhone ?? this.clinicPhone,
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
       clinicLicenseImage: clinicLicenseImage ?? this.clinicLicenseImage,
       clinicLicenseBytes: clinicLicenseBytes ?? this.clinicLicenseBytes,
       departmentIds: departmentIds ?? this.departmentIds,

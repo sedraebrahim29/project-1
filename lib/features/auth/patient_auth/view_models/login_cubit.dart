@@ -28,9 +28,14 @@ class LoginCubit extends Cubit<LoginState> {
     emit(state.copyWith(isLoading: true, status: LoginStatus.loading));
 
     try {
+<<<<<<< HEAD
       final response = await _authRepository.login(email, password);
       final userData = response['data'] is Map ? response['data']['user'] as Map<String, dynamic>? : null;
       emit(state.copyWith(isLoading: false, status: LoginStatus.success, userData: userData));
+=======
+      await _authRepository.login(email, password);
+      emit(state.copyWith(isLoading: false, status: LoginStatus.success));
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
     } on ApiException catch (e) {
       final isPendingAccount = e.message.toLowerCase().contains('pending');
       if (isPendingAccount) {

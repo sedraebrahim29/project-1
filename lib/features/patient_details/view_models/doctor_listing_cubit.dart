@@ -1,16 +1,24 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants/app_strings.dart';
+<<<<<<< HEAD
 import '../data/doctor_listing_repository.dart';
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 import '../models/doctor_dummy_data.dart';
 import 'doctor_listing_state.dart';
 
 class DoctorListingCubit extends Cubit<DoctorListingState> {
+<<<<<<< HEAD
   final DoctorListingRepository _repository;
 
   DoctorListingCubit(List<DoctorListingModel> initialDoctors, {DoctorListingRepository? repository})
       : _repository = repository ?? DoctorListingRepository(),
         super(DoctorListingState.initial(initialDoctors)) {
+=======
+  DoctorListingCubit(List<DoctorListingModel> dummyDoctors)
+      : super(DoctorListingState.initial(dummyDoctors)) {
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
     // The search field's controller lives here, in the Cubit, instead of
     // being rebuilt on every state emission inside the screen's build().
     // Recreating a TextEditingController on every keystroke (as the old
@@ -26,6 +34,7 @@ class DoctorListingCubit extends Cubit<DoctorListingState> {
 
   final TextEditingController searchController = TextEditingController();
 
+<<<<<<< HEAD
   /// يجيب الأطباء الحقيقيين المسجّلين فعلياً بالتطبيق (راجع ملاحظة
   /// DoctorListingRepository). بتستبدل أي بيانات أولية كانت موجودة
   /// (حتى لو كانت dummy لأغراض العرض المؤقت) بمجرد ما يوصل الرد.
@@ -38,6 +47,8 @@ class DoctorListingCubit extends Cubit<DoctorListingState> {
     _filterAndSearch();
   }
 
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
   @override
   Future<void> close() {
     searchController.dispose();

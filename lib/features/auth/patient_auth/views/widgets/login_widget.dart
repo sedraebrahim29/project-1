@@ -5,7 +5,10 @@ import 'package:untitled3/core/theme/app_colors.dart';
 import 'package:untitled3/core/constants/app_strings.dart';
 
 import '../../../../patient_details/screens/main_layout_screen.dart';
+<<<<<<< HEAD
 import '../../../../doctor_details/screens/doctor_main_layout_screen.dart';
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 import '../../../doctor_auth/view_models/register_cubit.dart';
 import '../../../doctor_auth/views/doctor_register_screen.dart';
 import '../../view_models/login_cubit.dart';
@@ -84,6 +87,7 @@ class _LoginCardWidgetsState extends State<LoginCardWidgets> {
         );
       }
 
+<<<<<<< HEAD
       // بعد نجاح الدخول: نوجّه حسب دور الحساب (data.user.role) القادم
       // فعلياً من رد /auth/login - طبيب بيروح لواجهاته (DoctorMainLayoutScreen)،
       // أي دور تاني (مريض ...) بيروح للواجهة الحالية تبع المريض.
@@ -96,6 +100,14 @@ class _LoginCardWidgetsState extends State<LoginCardWidgets> {
             builder: (context) => isDoctor && userData != null
                 ? DoctorMainLayoutScreen(currentUserJson: userData)
                 : MainLayoutScreen(currentUserJson: userData),
+=======
+      // التعديل هنا للانتقال إلى MainLayoutScreen
+      if (state.status == LoginStatus.success) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MainLayoutScreen(),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
           ),
         );
       }

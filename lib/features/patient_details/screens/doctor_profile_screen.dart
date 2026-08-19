@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled3/core/constants/setting.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/theme/app_colors.dart';
+<<<<<<< HEAD
 import '../../../core/cubits/medical_record_status_cubit.dart';
 import '../../doctor_details/data/doctor_schedule_repository.dart';
 import '../../doctor_details/models/work_schedule_models.dart';
@@ -11,11 +12,17 @@ import '../models/doctor_dummy_data.dart';
 import '../view_models/doctor_listing_cubit.dart';
 
 class DoctorProfileScreen extends StatefulWidget {
+=======
+import '../models/doctor_dummy_data.dart';
+
+class DoctorProfileScreen extends StatelessWidget {
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
   final DoctorListingModel doctor;
 
   const DoctorProfileScreen({super.key, required this.doctor});
 
   @override
+<<<<<<< HEAD
   State<DoctorProfileScreen> createState() => _DoctorProfileScreenState();
 }
 
@@ -105,6 +112,13 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
     // ✅ حي عبر Cubit مشترك (راجع core/cubits/medical_record_status_cubit.dart)
     // - مو حساب ثابت، فبيتحدث فوراً لو المريض عبّى سجله بمنتصف نفس الجلسة.
     final hasMedicalRecord = context.watch<MedicalRecordStatusCubit>().state;
+=======
+  Widget build(BuildContext context) {
+    final settingsState = context.watch<SettingsCubit>().state;
+    final currentScale = settingsState.fontScale;
+    final isDark = settingsState.themeMode == ThemeMode.dark;
+
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 
     double nameSize = 20.sp;
     double specialtySize = 14.sp;
@@ -118,13 +132,21 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
       nameSize = 26.sp; specialtySize = 18.sp; sectionTitleSize = 20.sp; bodyTextSize = 17.sp; feeSize = 24.sp;
     }
 
+<<<<<<< HEAD
     final scaffoldBg = isDark ? AppColors.darkBackground : AppColors.backgroundBeige;
     final cardBgColor = isDark ? AppColors.darkCard : AppColors.white;
     final doctorCardBg = isDark ? const Color(0xFF23392E) : const Color(0xFFC4D7C5);
+=======
+
+    final scaffoldBg = isDark ? AppColors.darkBackground : AppColors.backgroundBeige;
+    final cardBgColor = isDark ? AppColors.darkCard : AppColors.white;
+    final doctorCardBg = isDark ? const Color(0xFF23392E) : const Color(0xFFC4D7C5); // درجة داكنة متناسقة للكرت العلوي في الدارك
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
     final textColor = isDark ? AppColors.darkText : AppColors.textDark;
     final primaryGreenColor = isDark ? AppColors.darkPrimaryGreen : AppColors.primaryGreen;
     final borderColor = isDark ? Colors.white10 : AppColors.borderGrey;
 
+<<<<<<< HEAD
     final morningSlots = _slotsForSelectedDate().where((s) => s.startsAt.hour < 12).toList();
     final afternoonSlots = _slotsForSelectedDate().where((s) => s.startsAt.hour >= 12).toList();
 
@@ -132,6 +154,8 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
         ? (widget.doctor.clinicRefs[_selectedClinicIndex.clamp(0, widget.doctor.clinicRefs.length - 1)].consultationFee ?? doctor.consultationFee)
         : doctor.consultationFee;
 
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
     return Scaffold(
       backgroundColor: scaffoldBg,
       appBar: AppBar(
@@ -148,7 +172,12 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
               color: doctor.isFavourite ? const Color(0xFFD85A30) : textColor,
               size: 24.sp,
             ),
+<<<<<<< HEAD
             onPressed: () {},
+=======
+            onPressed: () {
+            },
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
           ),
           SizedBox(width: 8.w),
         ],
@@ -166,12 +195,20 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                     Container(
                       width: double.infinity,
                       padding: EdgeInsets.all(16.r),
+<<<<<<< HEAD
                       decoration: BoxDecoration(color: doctorCardBg, borderRadius: BorderRadius.circular(24.r)),
+=======
+                      decoration: BoxDecoration(
+                        color: doctorCardBg,
+                        borderRadius: BorderRadius.circular(24.r),
+                      ),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                       child: Stack(
                         children: [
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+<<<<<<< HEAD
                               if (doctor.rating > 0)
                                 Container(
                                   padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
@@ -194,6 +231,36 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                               SizedBox(height: 4.h),
                               Text(doctor.mainSpecialty,
                                   style: TextStyle(fontSize: specialtySize, color: textColor.withOpacity(0.8), fontWeight: FontWeight.w500)),
+=======
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                                decoration: BoxDecoration(
+                                  color: (isDark ? AppColors.darkCard : AppColors.white).withOpacity(0.9),
+                                  borderRadius: BorderRadius.circular(20.r),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.star_rounded, color: const Color(0xFFFBBF24), size: 16.sp),
+                                    SizedBox(width: 2.w),
+                                    Text(
+                                      '${doctor.rating}',
+                                      style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold, color: textColor),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 16.h),
+                              Text(
+                                doctor.fullName,
+                                style: TextStyle(fontSize: nameSize, fontWeight: FontWeight.w700, color: isDark ? AppColors.darkText : AppColors.primaryGreen),
+                              ),
+                              SizedBox(height: 4.h),
+                              Text(
+                                doctor.subSpecialty,
+                                style: TextStyle(fontSize: specialtySize, color: textColor.withOpacity(0.8), fontWeight: FontWeight.w500),
+                              ),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                               SizedBox(height: 24.h),
                               Row(
                                 children: [
@@ -214,9 +281,16 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16.r),
                                 color: cardBgColor,
+<<<<<<< HEAD
                                 image: doctor.profileImageUrl != null && doctor.profileImageUrl!.isNotEmpty
                                     ? DecorationImage(image: NetworkImage(doctor.profileImageUrl!), fit: BoxFit.cover)
                                     : const DecorationImage(image: AssetImage('assets/images/doctor_placeholder.png'), fit: BoxFit.cover),
+=======
+                                image: const DecorationImage(
+                                  image: AssetImage('assets/images/doctor_placeholder.png'),
+                                  fit: BoxFit.cover,
+                                ),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                               ),
                             ),
                           ),
@@ -225,6 +299,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                     ),
                     SizedBox(height: 24.h),
 
+<<<<<<< HEAD
                     if (widget.doctor.clinicRefs.length > 1) ...[
                       SizedBox(
                         height: 40.h,
@@ -259,6 +334,12 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                     ],
 
                     Text(AppStrings.about(context), style: TextStyle(fontSize: sectionTitleSize, fontWeight: FontWeight.w700, color: primaryGreenColor)),
+=======
+                    Text(
+                      AppStrings.about(context),
+                      style: TextStyle(fontSize: sectionTitleSize, fontWeight: FontWeight.w700, color: primaryGreenColor),
+                    ),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                     SizedBox(height: 8.h),
                     Text(
                       'Dr. ${doctor.lastName} is a dedicated professional with years of experience in providing complete medical care. Accurate profiles ensure better patient care and treatment outcomes.',
@@ -266,11 +347,38 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                     ),
                     SizedBox(height: 24.h),
 
+<<<<<<< HEAD
                     Text(AppStrings.availableSchedule(context), style: TextStyle(fontSize: sectionTitleSize, fontWeight: FontWeight.w700, color: primaryGreenColor)),
+=======
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          AppStrings.availableSchedule(context),
+                          style: TextStyle(fontSize: sectionTitleSize, fontWeight: FontWeight.w700, color: primaryGreenColor),
+                        ),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                          decoration: BoxDecoration(
+                            color: cardBgColor,
+                            borderRadius: BorderRadius.circular(12.r),
+                            border: Border.all(color: borderColor),
+                          ),
+                          child: Row(
+                            children: [
+                              Text('October', style: TextStyle(fontSize: 11.sp, color: textColor, fontWeight: FontWeight.w600)),
+                              Icon(Icons.keyboard_arrow_down_rounded, size: 14.sp, color: AppColors.textLightGrey),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                     SizedBox(height: 12.h),
 
                     SizedBox(
                       height: 65.h,
+<<<<<<< HEAD
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         physics: const BouncingScrollPhysics(),
@@ -292,10 +400,23 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                             ),
                           );
                         },
+=======
+                      child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        physics: const BouncingScrollPhysics(),
+                        children: [
+                          _buildDayCard('Mon', '12', primaryGreenColor, isDark ? const Color(0xFF2C3E35) : const Color(0xFFD2DDD5), textColor, isSelected: true),
+                          _buildDayCard('Tue', '13', primaryGreenColor, isDark ? const Color(0xFF2C3E35) : const Color(0xFFD2DDD5), textColor),
+                          _buildDayCard('Wed', '14', primaryGreenColor, isDark ? const Color(0xFF2C3E35) : const Color(0xFFD2DDD5), textColor),
+                          _buildDayCard('Thu', '15', primaryGreenColor, isDark ? const Color(0xFF2C3E35) : const Color(0xFFD2DDD5), textColor),
+                          _buildDayCard('Fri', '16', primaryGreenColor, isDark ? const Color(0xFF2C3E35) : const Color(0xFFD2DDD5), textColor),
+                        ],
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                       ),
                     ),
                     SizedBox(height: 16.h),
 
+<<<<<<< HEAD
                     if (_isLoading)
                       Padding(padding: EdgeInsets.symmetric(vertical: 24.h), child: const Center(child: CircularProgressIndicator()))
                     else if (_errorMessage != null)
@@ -340,6 +461,39 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                         ),
                       ],
                     ],
+=======
+                    Text(
+                      AppStrings.morning(context),
+                      style: TextStyle(fontSize: bodyTextSize, fontWeight: FontWeight.w600, color: isDark ? AppColors.darkText.withOpacity(0.6) : AppColors.textLightGrey),
+                    ),
+                    SizedBox(height: 8.h),
+                    Wrap(
+                      spacing: 10.w,
+                      runSpacing: 10.h,
+                      children: [
+                        _buildTimeSlot('09:00 AM', cardBgColor, borderColor, textColor, primaryGreenColor, doctorCardBg),
+                        _buildTimeSlot('09:30 AM', cardBgColor, borderColor, textColor, primaryGreenColor, doctorCardBg, isSelected: true),
+                        _buildTimeSlot('10:00 AM', cardBgColor, borderColor, textColor, primaryGreenColor, doctorCardBg),
+                        _buildTimeSlot('11:30 AM', cardBgColor, borderColor, textColor, primaryGreenColor, doctorCardBg),
+                      ],
+                    ),
+                    SizedBox(height: 16.h),
+
+                    Text(
+                      AppStrings.afternoon(context),
+                      style: TextStyle(fontSize: bodyTextSize, fontWeight: FontWeight.w600, color: isDark ? AppColors.darkText.withOpacity(0.6) : AppColors.textLightGrey),
+                    ),
+                    SizedBox(height: 8.h),
+                    Wrap(
+                      spacing: 10.w,
+                      runSpacing: 10.h,
+                      children: [
+                        _buildTimeSlot('01:00 PM', cardBgColor, borderColor, textColor, primaryGreenColor, doctorCardBg),
+                        _buildTimeSlot('02:30 PM', cardBgColor, borderColor, textColor, primaryGreenColor, doctorCardBg, isDisabled: true),
+                        _buildTimeSlot('04:00 PM', cardBgColor, borderColor, textColor, primaryGreenColor, doctorCardBg),
+                      ],
+                    ),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                     SizedBox(height: 20.h),
                   ],
                 ),
@@ -350,7 +504,13 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 14.h),
               decoration: BoxDecoration(
                 color: cardBgColor,
+<<<<<<< HEAD
                 boxShadow: [BoxShadow(color: Colors.black.withOpacity(isDark ? 0.3 : 0.03), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, -2))],
+=======
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withOpacity(isDark ? 0.3 : 0.03), spreadRadius: 1, blurRadius: 10, offset: const Offset(0, -2)),
+                ],
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -359,15 +519,28 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
+<<<<<<< HEAD
                       Text(AppStrings.consultationFeeLabel(context), style: TextStyle(fontSize: 12.sp, color: AppColors.textLightGrey, fontWeight: FontWeight.w500)),
                       SizedBox(height: 2.h),
                       Text('\$${displayFee.toStringAsFixed(2)}', style: TextStyle(fontSize: feeSize, fontWeight: FontWeight.w700, color: textColor)),
+=======
+                      Text(
+                        AppStrings.consultationFeeLabel(context),
+                        style: TextStyle(fontSize: 12.sp, color: AppColors.textLightGrey, fontWeight: FontWeight.w500),
+                      ),
+                      SizedBox(height: 2.h),
+                      Text(
+                        '\$${doctor.consultationFee.toStringAsFixed(2)}',
+                        style: TextStyle(fontSize: feeSize, fontWeight: FontWeight.w700, color: textColor),
+                      ),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                     ],
                   ),
                   SizedBox(
                     width: 200.w,
                     height: 46.h,
                     child: ElevatedButton(
+<<<<<<< HEAD
                       // ✅ 18/8: لو المريض ما عبّى سجله الطبي بعد، الزر
                       // بيضل يبين كأنه معطّل بصرياً (لون باهت)، بس لسا
                       // قابل للضغط - الضغطة بتوجّهه مباشرة لتعبئة سجله
@@ -381,14 +554,27 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: hasMedicalRecord ? primaryGreenColor : primaryGreenColor.withOpacity(0.4),
                         disabledBackgroundColor: primaryGreenColor.withOpacity(0.4),
+=======
+                      onPressed: () {
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryGreenColor,
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24.r)),
                         elevation: 0,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+<<<<<<< HEAD
                           Text(AppStrings.bookAppointment(context),
                               style: TextStyle(color: isDark ? AppColors.darkBackground : AppColors.white, fontSize: 14.sp, fontWeight: FontWeight.w700)),
+=======
+                          Text(
+                            AppStrings.bookAppointment(context),
+                            style: TextStyle(color: isDark ? AppColors.darkBackground : AppColors.white, fontSize: 14.sp, fontWeight: FontWeight.w700),
+                          ),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                           SizedBox(width: 6.w),
                           Icon(Icons.arrow_forward, color: isDark ? AppColors.darkBackground : AppColors.white, size: 16.sp),
                         ],
@@ -404,6 +590,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
     );
   }
 
+<<<<<<< HEAD
   /// ✅ لما يضغط المريض على "احجز الآن" وهو لسا ما عبّى سجله الطبي -
   /// بنوريه ليش الزر "معطّل" وبنوجّهه مباشرة لتاب السجل الطبي بنفس
   /// MainLayoutScreen (عبر DoctorListingCubit.changeTab) بدل ما يترك
@@ -430,11 +617,20 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
     );
   }
 
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
   Widget _buildQuickActionIcon(IconData icon, Color bg, Color iconColor) {
     return Container(
       width: 44.r,
       height: 44.r,
+<<<<<<< HEAD
       decoration: BoxDecoration(color: bg, shape: BoxShape.circle),
+=======
+      decoration: BoxDecoration(
+        color: bg,
+        shape: BoxShape.circle,
+      ),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
       child: Icon(icon, color: iconColor, size: 20.sp),
     );
   }
@@ -442,7 +638,15 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
   Widget _buildDayCard(String day, String date, Color selectedColor, Color unselectedColor, Color textColor, {bool isSelected = false}) {
     return Container(
       width: 52.w,
+<<<<<<< HEAD
       decoration: BoxDecoration(color: isSelected ? selectedColor : unselectedColor, borderRadius: BorderRadius.circular(12.r)),
+=======
+      margin: EdgeInsets.only(right: 10.w),
+      decoration: BoxDecoration(
+        color: isSelected ? selectedColor : unselectedColor,
+        borderRadius: BorderRadius.circular(12.r),
+      ),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -454,6 +658,7 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
     );
   }
 
+<<<<<<< HEAD
   Widget _buildTimeSlot(AvailabilitySlot slot, Color cardBg, Color border, Color text, Color primary, Color selectedBg) {
     final isSelected = _selectedSlot != null && _selectedSlot!.id == slot.id;
     final isDisabled = !slot.isAvailable;
@@ -471,6 +676,35 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
         child: Text(
           label,
           style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600, color: isDisabled ? AppColors.textLightGrey.withOpacity(0.4) : text),
+=======
+  Widget _buildTimeSlot(String time, Color cardBg, Color border, Color text, Color primary, Color selectedBg, {bool isSelected = false, bool isDisabled = false}) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+      decoration: BoxDecoration(
+        color: isSelected
+            ? selectedBg
+            : isDisabled
+            ? Colors.black.withOpacity(0.05)
+            : cardBg,
+        borderRadius: BorderRadius.circular(8.r),
+        border: Border.all(
+          color: isSelected
+              ? primary
+              : isDisabled
+              ? Colors.transparent
+              : border,
+          width: 1.w,
+        ),
+      ),
+      child: Text(
+        time,
+        style: TextStyle(
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w600,
+          color: isDisabled
+              ? AppColors.textLightGrey.withOpacity(0.4)
+              : text,
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
         ),
       ),
     );

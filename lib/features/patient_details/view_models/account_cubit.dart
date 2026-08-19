@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+<<<<<<< HEAD
 import '../../auth/data/auth_repository.dart';
 import 'account_state.dart';
 
@@ -11,6 +12,15 @@ class AccountCubit extends Cubit<AccountState> {
   AccountCubit({AuthRepository? authRepository})
       : _authRepository = authRepository ?? AuthRepository(),
         super(const AccountState());
+=======
+import 'account_state.dart';
+
+/// Backs both the "Delete account" and "Log out" confirmation flows, so the
+/// dialog can show a loading state while the (simulated) request is in
+/// flight instead of freezing the UI with no feedback.
+class AccountCubit extends Cubit<AccountState> {
+  AccountCubit() : super(const AccountState());
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 
   Future<void> deleteAccount() async {
     emit(state.copyWith(status: AccountActionStatus.processing));
@@ -20,10 +30,14 @@ class AccountCubit extends Cubit<AccountState> {
 
   Future<void> logOut() async {
     emit(state.copyWith(status: AccountActionStatus.processing));
+<<<<<<< HEAD
     // نداء حقيقي: بيبعت /auth/logout للسيرفر (يلغي التوكن من جهته) وبكل
     // الحالات (نجاح أو فشل بالاتصال) بيمسح التوكن المحلي - راجع
     // AuthRepository.logout().
     await _authRepository.logout();
+=======
+    await Future.delayed(const Duration(milliseconds: 500));
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
     emit(state.copyWith(status: AccountActionStatus.done));
   }
 

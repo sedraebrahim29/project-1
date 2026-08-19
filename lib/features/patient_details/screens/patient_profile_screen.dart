@@ -5,7 +5,10 @@ import 'package:untitled3/core/constants/setting.dart';
 import '../../../core/constants/app_strings.dart';
 import '../../../core/theme/app_colors.dart';
 import '../models/patient_profile_dummy_data.dart';
+<<<<<<< HEAD
 import '../../auth/Login.dart';
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 import '../views/widgets/settings_drawer_widget.dart';
 import 'widgets/confirm_action_dialog.dart';
 
@@ -225,6 +228,7 @@ class PatientProfileScreen extends StatelessWidget {
                 textColor: dangerColor,
                 iconColor: dangerColor,
                 labelSize: rowValueSize,
+<<<<<<< HEAD
                 onTap: () async {
                   final loggedOut = await showConfirmActionDialog(
                     context,
@@ -244,6 +248,16 @@ class PatientProfileScreen extends StatelessWidget {
                     );
                   }
                 },
+=======
+                onTap: () => showConfirmActionDialog(
+                  context,
+                  title: AppStrings.logOutConfirmTitle(context),
+                  description: AppStrings.logOutConfirmDesc(context),
+                  confirmLabel: AppStrings.logOut(context),
+                  cancelLabel: AppStrings.cancel(context),
+                  onConfirm: (cubit) => cubit.logOut(),
+                ),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
               ),
               _rowDivider(),
               _ActionRow(

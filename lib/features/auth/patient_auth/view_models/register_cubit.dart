@@ -173,6 +173,7 @@ class RegisterCubit extends Cubit<RegisterState> {
         'dob': model.dateOfBirth,
         'address': model.homeAddress,
         'blood_type': model.bloodType,
+<<<<<<< HEAD
         // ⚠️ lat/lng: مضافة حديثاً بالفرونت (تحديد الموقع من خريطة حقيقية)
         // مو موثّقة/مؤكدة بعد بالـ Postman collection كحقول يقبلها الباك
         // بـ complete-profile - لازم فريق الباك يتأكد إنه العمودين هدول
@@ -180,6 +181,8 @@ class RegisterCubit extends Cubit<RegisterState> {
         // ويتجاهلوا بهدوء بدون أي خطأ ظاهر).
         if (model.latitude != null) 'latitude': model.latitude,
         if (model.longitude != null) 'longitude': model.longitude,
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
       });
       emit(RegisterSubmitSuccess(currentStep: currentStep, model: model));
     } on ApiException catch (e) {

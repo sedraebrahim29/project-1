@@ -29,12 +29,15 @@ class _StepThreeWidgetsState extends State<StepThreeWidgets> {
   // خطوة جديدة بالكامل (تفادياً لإعادة ترقيم كل الخطوات التالية).
   late final Future<List<DepartmentModel>> _departmentsFuture;
 
+<<<<<<< HEAD
   @override
   void initState() {
     super.initState();
     _departmentsFuture = DepartmentsRepository().getDepartments();
   }
 
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
   Future<void> _pickSingleImage(
       BuildContext context,
       DoctorRegisterCubit cubit,
@@ -45,6 +48,7 @@ class _StepThreeWidgetsState extends State<StepThreeWidgets> {
     if (image != null) {
       final Uint8List bytes = await image.readAsBytes();
       cubit.updateRegisterModel(apply(image, bytes));
+<<<<<<< HEAD
     }
   }
 
@@ -88,7 +92,28 @@ class _StepThreeWidgetsState extends State<StepThreeWidgets> {
     if (picked != null) {
       final iso = '${picked.year.toString().padLeft(4, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}';
       cubit.updateRegisterModel(model.copyWith(practiceStartDate: iso));
+=======
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
     }
+  }
+
+  Future<void> _pickCertificates(BuildContext context, DoctorRegisterCubit cubit, DoctorRegisterModel model) async {
+    final List<XFile> picked = await _picker.pickMultiImage(imageQuality: 85);
+    if (picked.isEmpty) return;
+
+    final newImages = List<XFile>.from(model.certificatesImages)..addAll(picked);
+    final newBytesList = List<Uint8List>.from(model.certificatesBytes);
+    for (final file in picked) {
+      newBytesList.add(await file.readAsBytes());
+    }
+
+    cubit.updateRegisterModel(model.copyWith(certificatesImages: newImages, certificatesBytes: newBytesList));
+  }
+
+  void _removeCertificate(DoctorRegisterCubit cubit, DoctorRegisterModel model, int index) {
+    final newImages = List<XFile>.from(model.certificatesImages)..removeAt(index);
+    final newBytesList = List<Uint8List>.from(model.certificatesBytes)..removeAt(index);
+    cubit.updateRegisterModel(model.copyWith(certificatesImages: newImages, certificatesBytes: newBytesList));
   }
 
   @override
@@ -116,6 +141,7 @@ class _StepThreeWidgetsState extends State<StepThreeWidgets> {
               ),
               SizedBox(height: 25.h),
 
+<<<<<<< HEAD
               // --- الاختصاص (department_ids) ---
               Text(AppStrings.mainSpecialty(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
               SizedBox(height: 4.h),
@@ -168,6 +194,39 @@ class _StepThreeWidgetsState extends State<StepThreeWidgets> {
                     }).toList(),
                   );
                 },
+=======
+
+              Text('National ID Card', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
+              SizedBox(height: 8.h),
+              _buildUploadBox(
+                context,
+                themeColor,
+                model.idCardBytes,
+                    () => _pickSingleImage(
+                  context,
+                  cubit,
+                  model,
+                  apply: (image, bytes) => model.copyWith(idCardImage: image, idCardBytes: bytes),
+                ),
+              ),
+
+              SizedBox(height: 25.h),
+              const Divider(),
+              SizedBox(height: 25.h),
+
+              Text('Personal Photo', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
+              SizedBox(height: 8.h),
+              _buildUploadBox(
+                context,
+                themeColor,
+                model.photoBytes,
+                    () => _pickSingleImage(
+                  context,
+                  cubit,
+                  model,
+                  apply: (image, bytes) => model.copyWith(photoImage: image, photoBytes: bytes),
+                ),
+>>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
               ),
 
               SizedBox(height: 20.h),
