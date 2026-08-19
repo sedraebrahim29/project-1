@@ -10,15 +10,12 @@ class LoginState {
   final LoginStatus status;
   final String? errorMessage;
   final String? pendingMessage;
-<<<<<<< HEAD
   // بيانات المستخدم الحقيقية القادمة من data.user برد /auth/login الناجح
   // - تُستخدم لتوجيه الملاح (Navigator) حسب الدور (طبيب/مريض) وتغذية
   // شاشة الطبيب/المريض الرئيسية ببياناته الحقيقية مباشرة بدون أي بيانات
   // وهمية.
   final Map<String, dynamic>? userData;
 
-=======
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
   const LoginState({
     this.activeTab = LoginTab.login,
     this.obscurePassword = true,

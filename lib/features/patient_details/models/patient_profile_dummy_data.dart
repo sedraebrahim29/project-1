@@ -30,7 +30,6 @@ class PatientProfileModel {
     final l = lastName.isNotEmpty ? lastName[0].toUpperCase() : '';
     return '$f$l';
   }
-<<<<<<< HEAD
 
   /// يبني بروفايل المريض من user object الحقيقي القادم من رد /auth/login
   /// (data.user) - نفس الأسلوب المستخدم بـ PatientInfo.fromUserJson
@@ -51,8 +50,6 @@ class PatientProfileModel {
       homeAddress: json['address']?.toString() ?? '',
     );
   }
-=======
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 }
 
 const PatientProfileModel dummyPatientProfile = PatientProfileModel(

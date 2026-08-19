@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:untitled3/features/patient_details/screens/main_layout_screen.dart';
 // --- Models ---
 import '../../../../../../core/constants/app_strings.dart';
 import '../../../../../../core/constants/setting.dart';
-<<<<<<< HEAD
 import '../../../../../../core/cubits/medical_record_status_cubit.dart';
-=======
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 // --- Widgets ---
 import '../../../models/review_models.dart';
 import '../../../view_models/review_submit_cubit.dart';
 import '../../widgets/medical_profile_widgets/medical_history_widgets/step_progress_bar.dart';
 import '../../widgets/medical_profile_widgets/review/review_section_card.dart';
-import '../../../../patiant_medical_record/views/screens/medical_records_screens/medical_overview_screen.dart';
 
 // =============================================
 // الشاشة الرئيسية - Medical Profile / Step 4
@@ -22,15 +17,9 @@ import '../../../../patiant_medical_record/views/screens/medical_records_screens
 // ملاحظة معمارية: ما في نداء "إرسال نهائي" هون لأنه كل قسم (تاريخ
 // مرضي/أدوية/ملفات) انحفظ فوراً بالباك وقت إضافته بالخطوات
 // السابقة. هاي الشاشة بترجع نسخة طازجة (GET) للمراجعة بس، وزر
-<<<<<<< HEAD
 // "Confirm & Submit" هلق بيرجعك لنفس MainLayoutScreen يلي فتحت منه
 // هالمعالج (popUntil لأقرب Route بالستاك) بدل ما يفتح شاشة
 // MedicalOverviewScreen جديدة بمعزل عن الـ BottomNav.
-=======
-// "Confirm & Submit" هلق بيوديك مباشرة لـ MedicalOverviewScreen (الواجهة
-// الفعلية لسجل المريض) بدل ما يرجعك لبداية التطبيق فقط - وبيمرر
-// hasMedicalRecord: true لأنه أكيد صار عنده سجل هلق.
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 //
 // ⚠️ currentUserJson (بيانات كارد المريض العلوي) مو متوفرة بهاد
 // الشاشة - مررها هون إذا صار عندك وصول إلها بهاد النقطة (مثلاً من
@@ -239,23 +228,15 @@ class _ReviewSubmitView extends StatelessWidget {
 
           // =============================================
           // زر Confirm & Submit - كل البيانات محفوظة أصلاً بالباك، هاد
-<<<<<<< HEAD
           // الزر بيأكد الإنهاء ويرجعك لنفس MainLayoutScreen يلي فتحت
           // منه هاي الخطوات (مو شاشة MedicalOverviewScreen لحالها بمعزل
           // عن الـ BottomNav/التابات التانية) - popUntil بترجع لأقرب
           // Route موجود أصلاً بالستاك (MainLayoutScreen) وتشيل كل خطوات
           // هالمعالج من فوقه، بدل ما تفتح نسخة جديدة وتمسح كل الستاك.
-=======
-          // الزر بيأكد الإنهاء ويوديك مباشرة على واجهة السجل الطبي
-          // الفعلية (Overview/History/Medications/Attachments) بدل ما
-          // يرجعك لبداية التطبيق فقط. pushAndRemoveUntil حتى زر الرجوع
-          // ما يرجّعك جوا خطوات المعالج تاني.
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
           // =============================================
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-<<<<<<< HEAD
               onPressed: () {
                 // ✅ 18/8: قبل ما نرجع، منعلّم صراحة إنه المريض
                 // صار عنده سجل طبي (عبر MedicalRecordStatusCubit
@@ -265,14 +246,6 @@ class _ReviewSubmitView extends StatelessWidget {
                 context.read<MedicalRecordStatusCubit>().markHasRecord();
                 Navigator.of(context).popUntil((route) => route.isFirst);
               },
-=======
-              onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                  builder: (_) => const MainLayoutScreen(),
-                ),
-                (route) => false,
-              ),
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
               style: ElevatedButton.styleFrom(
                 backgroundColor: theme.primaryColor,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

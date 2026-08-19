@@ -5,11 +5,8 @@ import 'package:untitled3/core/constants/setting.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../models/doctor_dummy_data.dart';
-<<<<<<< HEAD
 import '../../view_models/doctor_listing_cubit.dart';
 import '../../../../core/cubits/medical_record_status_cubit.dart';
-=======
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 import '../doctor_profile_screen.dart';
 
 /// A compact doctor row for the Home screen — lighter than
@@ -44,7 +41,6 @@ class HomeDoctorTile extends StatelessWidget {
     final borderColor = isDark ? Colors.transparent : AppColors.borderGrey;
 
     return GestureDetector(
-<<<<<<< HEAD
       onTap: () {
         // ⚠️ 19/8: نفس مشكلة doctor_card_widget - لازم نمرر
         // MedicalRecordStatusCubit و DoctorListingCubit للشاشة المفتوحة
@@ -64,9 +60,6 @@ class HomeDoctorTile extends StatelessWidget {
           ),
         );
       },
-=======
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => DoctorProfileScreen(doctor: doc))),
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
       child: Container(
         margin: EdgeInsets.only(bottom: 12.h),
         padding: EdgeInsets.all(12.r),

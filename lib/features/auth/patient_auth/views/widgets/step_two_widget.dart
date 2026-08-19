@@ -154,46 +154,6 @@ class StepTwoWidgets extends StatelessWidget {
                 },
               ),
               SizedBox(height: 20.h),
-
-              // 4. حقل رقم الهاتف - مطلوب من الباك اند بالـ complete-profile
-              Text('Phone', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
-              SizedBox(height: 6.h),
-              TextFormField(
-                initialValue: state.model.phone,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  hintText: 'Enter your phone number',
-                  prefixIcon: const Icon(Icons.phone_outlined),
-                  errorText: _fieldError(fieldErrors, 'phone'),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-                ),
-                onChanged: (value) {
-                  cubit.updateRegisterModel(state.model.copyWith(phone: value));
-                },
-              ),
-              SizedBox(height: 20.h),
-
-              // 5. فصيلة الدم - مطلوبة من الباك اند بالـ complete-profile (blood_type)
-              Text('Blood Type', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
-              SizedBox(height: 6.h),
-              DropdownButtonFormField<String>(
-                value: state.model.bloodType,
-                decoration: InputDecoration(
-                  hintText: 'Select your blood type',
-                  prefixIcon: const Icon(Icons.bloodtype_outlined),
-                  errorText: _fieldError(fieldErrors, 'blood_type'),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
-                ),
-                items: const [
-                  'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-',
-                ].map((type) => DropdownMenuItem(value: type, child: Text(type))).toList(),
-                onChanged: (value) {
-                  cubit.updateRegisterModel(state.model.copyWith(bloodType: value));
-                },
-              ),
-              SizedBox(height: 20.h),
             ],
           ),
         );

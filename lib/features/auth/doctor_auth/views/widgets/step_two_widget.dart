@@ -89,7 +89,6 @@ class StepTwoWidgets extends StatelessWidget {
                 ),
                 onChanged: (value) => cubit.updateRegisterModel(state.model.copyWith(homeAddress: value)),
               ),
-<<<<<<< HEAD
               LocationPickField(
                 latitude: state.model.latitude,
                 longitude: state.model.longitude,
@@ -110,21 +109,6 @@ class StepTwoWidgets extends StatelessWidget {
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                   contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
                 ),
-=======
-              SizedBox(height: 20.h),
-
-              Text(AppStrings.phoneNumber(context), style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
-              SizedBox(height: 6.h),
-              TextFormField(
-                initialValue: state.model.phone,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  hintText: AppStrings.phoneHint(context),
-                  prefixIcon: const Icon(Icons.phone_outlined),
-                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
-                  contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-                ),
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                 onChanged: (value) => cubit.updateRegisterModel(state.model.copyWith(phone: value)),
               ),
               SizedBox(height: 20.h),

@@ -4,10 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../../../core/theme/app_colors.dart';
-<<<<<<< HEAD
 import '../../../../../core/widgets/location_pick_field.dart';
-=======
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 import '../../view_models/register_cubit.dart';
 import '../../view_models/register_state.dart';
 import '../../models/register_model.dart';
@@ -66,7 +63,6 @@ class StepFourWidgets extends StatelessWidget {
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                   ),
                   onChanged: (value) => cubit.updateRegisterModel(model.copyWith(clinicId: value)),
-<<<<<<< HEAD
                 ),
                 SizedBox(height: 8.h),
                 Text(
@@ -95,23 +91,6 @@ class StepFourWidgets extends StatelessWidget {
                   decoration: InputDecoration(hintText: 'Clinic name', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r))),
                   onChanged: (value) => cubit.updateRegisterModel(model.copyWith(clinicName: value)),
                 ),
-=======
-                ),
-                SizedBox(height: 8.h),
-                Text(
-                  'Temporary: ask your clinic admin for its ID. This will be replaced with a search field once available.',
-                  style: TextStyle(fontSize: 11.sp, color: AppColors.textLightGrey),
-                ),
-              ] else ...[
-                // create_clinic
-                Text('Clinic Name', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
-                SizedBox(height: 6.h),
-                TextFormField(
-                  initialValue: model.clinicName,
-                  decoration: InputDecoration(hintText: 'Clinic name', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r))),
-                  onChanged: (value) => cubit.updateRegisterModel(model.copyWith(clinicName: value)),
-                ),
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                 SizedBox(height: 15.h),
                 Text('Clinic Address', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
                 SizedBox(height: 6.h),
@@ -120,7 +99,6 @@ class StepFourWidgets extends StatelessWidget {
                   decoration: InputDecoration(hintText: 'Clinic address', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r))),
                   onChanged: (value) => cubit.updateRegisterModel(model.copyWith(clinicAddress: value)),
                 ),
-<<<<<<< HEAD
                 LocationPickField(
                   latitude: model.clinicLatitude,
                   longitude: model.clinicLongitude,
@@ -129,8 +107,6 @@ class StepFourWidgets extends StatelessWidget {
                     model.copyWith(clinicLatitude: lat, clinicLongitude: lng),
                   ),
                 ),
-=======
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                 SizedBox(height: 15.h),
                 Text('Clinic Phone', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
                 SizedBox(height: 6.h),
@@ -140,7 +116,6 @@ class StepFourWidgets extends StatelessWidget {
                   decoration: InputDecoration(hintText: 'Clinic phone', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r))),
                   onChanged: (value) => cubit.updateRegisterModel(model.copyWith(clinicPhone: value)),
                 ),
-<<<<<<< HEAD
                 SizedBox(height: 15.h),
                 Text('Consultation Fee at this Clinic', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
                 SizedBox(height: 6.h),
@@ -154,8 +129,6 @@ class StepFourWidgets extends StatelessWidget {
                   ),
                   onChanged: (value) => cubit.updateRegisterModel(model.copyWith(consultationFee: value)),
                 ),
-=======
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                 SizedBox(height: 20.h),
                 Text('Clinic License', style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w500)),
                 SizedBox(height: 8.h),

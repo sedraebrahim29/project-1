@@ -100,14 +100,10 @@ class PatientInfoCard extends StatelessWidget {
 
     final age = info.ageInYears;
 
-<<<<<<< HEAD
     return InkWell(
       onTap: onEditProfile,
       borderRadius: BorderRadius.circular(12.r),
       child: Container(
-=======
-    return Container(
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
       decoration: decoration,
       child: Padding(
         padding: EdgeInsets.all(16.w),
@@ -175,19 +171,6 @@ class PatientInfoCard extends StatelessWidget {
         ),
       ),
       ),
-    );
-  }
-
-  String _yrsLabel(BuildContext context) =>
-      Localizations.localeOf(context).languageCode == 'ar' ? 'سنة' : 'yrs';
-
-  String _capitalize(String s) => s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
-
-  Widget _skeletonLine(Color color, double width) {
-    return Container(
-      width: width,
-      height: 12.h,
-      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(4.r)),
     );
   }
 

@@ -78,7 +78,6 @@ class _DoctorStepFiveWidgetState extends State<DoctorStepFiveWidget> {
                 },
               ),
 
-<<<<<<< HEAD
               // Step 4: Specialty + Documents
               FutureBuilder<List<DepartmentModel>>(
                 future: _departmentsFuture,
@@ -104,18 +103,6 @@ class _DoctorStepFiveWidgetState extends State<DoctorStepFiveWidget> {
                       'Certificates': m.certificatesBytes.isNotEmpty ? '${m.certificatesBytes.length} uploaded' : 'None',
                     },
                   );
-=======
-              // Step 4: Documents
-              _buildReviewSection(
-                context,
-                title: 'Documents',
-                onEdit: () => cubit.jumpToStep(4),
-                items: {
-                  'National ID': m.idCardBytes != null ? 'Uploaded' : 'Missing',
-                  'Personal Photo': m.photoBytes != null ? 'Uploaded' : 'Missing',
-                  'Practice License': m.licenseBytes != null ? 'Uploaded' : 'Missing',
-                  'Certificates': m.certificatesBytes.isNotEmpty ? '${m.certificatesBytes.length} uploaded' : 'None',
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                 },
               ),
 

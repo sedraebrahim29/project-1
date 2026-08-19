@@ -1,5 +1,4 @@
 
-<<<<<<< HEAD
 /// عيادة واحدة من عيادات الطبيب (بمعرّفها الحقيقي id) - لازم الـ id
 /// تحديداً لاستدعاء GET /doctors/{id}/availability بشكل صحيح لكل عيادة
 /// (مو بس الاسم للعرض متل workplaceNames).
@@ -11,8 +10,6 @@ class DoctorListingClinicRef {
   const DoctorListingClinicRef({required this.id, required this.name, this.consultationFee});
 }
 
-=======
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 class DoctorListingModel {
   final String id;
   final String firstName;
@@ -23,10 +20,7 @@ class DoctorListingModel {
   final double rating;
   final int reviewCount;
   final List<String> workplaceNames;
-<<<<<<< HEAD
   final List<DoctorListingClinicRef> clinicRefs;
-=======
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
   final String primaryWorkplaceType;
   final String? availabilityStatus;
   final int? availableInDays;

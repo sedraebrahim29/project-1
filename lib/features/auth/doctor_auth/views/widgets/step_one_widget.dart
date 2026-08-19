@@ -23,12 +23,6 @@ class _StepOneWidgetsState extends State<StepOneWidgets> {
   late final TextEditingController _passwordController;
   late final TextEditingController _confirmPasswordController;
 
-<<<<<<< HEAD
-=======
-  bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
-
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
   @override
   void initState() {
     super.initState();
@@ -51,46 +45,10 @@ class _StepOneWidgetsState extends State<StepOneWidgets> {
     _confirmPasswordController.dispose();
     super.dispose();
   }
-<<<<<<< HEAD
-=======
-
-  InputDecoration _inputDecoration({
-    required String hintText,
-    Widget? prefixIcon,
-    Widget? suffixIcon,
-    EdgeInsetsGeometry? contentPadding,
-    required bool isDarkMode,
-  }) {
-    return InputDecoration(
-      hintText: hintText,
-      prefixIcon: prefixIcon,
-      suffixIcon: suffixIcon,
-      contentPadding: contentPadding,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.r),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.r),
-        borderSide: BorderSide(color: AppColors.textLightGrey.withOpacity(0.4)),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.r),
-        borderSide: BorderSide(
-          color: isDarkMode ? AppColors.darkPrimaryGreen : AppColors.primaryGreen,
-          width: 2.0,
-        ),
-      ),
-    );
-  }
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-<<<<<<< HEAD
-=======
-    final isDarkMode = theme.brightness == Brightness.dark;
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
     final cubit = context.read<DoctorRegisterCubit>();
 
     return BlocListener<DoctorRegisterCubit, DoctorRegisterState>(
@@ -126,10 +84,10 @@ class _StepOneWidgetsState extends State<StepOneWidgets> {
                         TextFormField(
                           controller: _firstNameController,
                           validator: (val) => (val == null || val.isEmpty) ? AppStrings.requiredField(context) : null,
-                          decoration: _inputDecoration(
+                          decoration: InputDecoration(
                             hintText: AppStrings.firstNameHint(context),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                             contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-                            isDarkMode: isDarkMode,
                           ),
                           onChanged: (value) => cubit.updateRegisterModel(cubit.state.model.copyWith(firstName: value)),
                         ),
@@ -146,10 +104,10 @@ class _StepOneWidgetsState extends State<StepOneWidgets> {
                         TextFormField(
                           controller: _lastNameController,
                           validator: (val) => (val == null || val.isEmpty) ? AppStrings.requiredField(context) : null,
-                          decoration: _inputDecoration(
+                          decoration: InputDecoration(
                             hintText: AppStrings.lastNameHint(context),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                             contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
-                            isDarkMode: isDarkMode,
                           ),
                           onChanged: (value) => cubit.updateRegisterModel(cubit.state.model.copyWith(lastName: value)),
                         ),
@@ -165,10 +123,10 @@ class _StepOneWidgetsState extends State<StepOneWidgets> {
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 validator: (val) => (val == null || val.isEmpty || !val.contains('@')) ? AppStrings.invalidEmail(context) : null,
-                decoration: _inputDecoration(
+                decoration: InputDecoration(
                   hintText: AppStrings.emailHint(context),
                   prefixIcon: const Icon(Icons.email_outlined),
-                  isDarkMode: isDarkMode,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                 ),
                 onChanged: (value) => cubit.updateRegisterModel(cubit.state.model.copyWith(email: value)),
               ),
@@ -179,17 +137,10 @@ class _StepOneWidgetsState extends State<StepOneWidgets> {
                 controller: _idCardNumberController,
                 keyboardType: TextInputType.number,
                 validator: (val) => (val == null || val.isEmpty) ? AppStrings.requiredField(context) : null,
-<<<<<<< HEAD
                 decoration: InputDecoration(
                   hintText: 'Enter your ID card number',
                   prefixIcon: const Icon(Icons.badge_outlined),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
-=======
-                decoration: _inputDecoration(
-                  hintText: 'Enter your ID card number',
-                  prefixIcon: const Icon(Icons.badge_outlined),
-                  isDarkMode: isDarkMode,
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                 ),
                 onChanged: (value) => cubit.updateRegisterModel(cubit.state.model.copyWith(idCardNumber: value)),
               ),
@@ -198,20 +149,13 @@ class _StepOneWidgetsState extends State<StepOneWidgets> {
               SizedBox(height: 6.h),
               TextFormField(
                 controller: _passwordController,
-<<<<<<< HEAD
                 obscureText: true,
-=======
-                obscureText: _obscurePassword,
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                 validator: (val) => (val == null || val.length < 8) ? AppStrings.passwordLengthWarning(context) : null,
-                decoration: _inputDecoration(
+                decoration: InputDecoration(
                   hintText: AppStrings.passwordHint(context),
                   prefixIcon: const Icon(Icons.lock_outline),
-                  suffixIcon: IconButton(
-                    icon: Icon(_obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined),
-                    onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-                  ),
-                  isDarkMode: isDarkMode,
+                  suffixIcon: const Icon(Icons.visibility_off_outlined),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                 ),
                 onChanged: (value) => cubit.updateRegisterModel(cubit.state.model.copyWith(password: value)),
               ),
@@ -220,24 +164,16 @@ class _StepOneWidgetsState extends State<StepOneWidgets> {
               SizedBox(height: 6.h),
               TextFormField(
                 controller: _confirmPasswordController,
-<<<<<<< HEAD
                 obscureText: true,
-=======
-                obscureText: _obscureConfirmPassword,
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                 validator: (val) {
                   if (val == null || val.isEmpty) return AppStrings.requiredField(context);
                   if (val != _passwordController.text) return AppStrings.passwordsDoNotMatch(context);
                   return null;
                 },
-                decoration: _inputDecoration(
+                decoration: InputDecoration(
                   hintText: AppStrings.passwordHint(context),
                   prefixIcon: const Icon(Icons.lock_outline),
-                  suffixIcon: IconButton(
-                    icon: Icon(_obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined),
-                    onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
-                  ),
-                  isDarkMode: isDarkMode,
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
                 ),
                 onChanged: (value) => cubit.updateRegisterModel(cubit.state.model.copyWith(confirmPassword: value)),
               ),

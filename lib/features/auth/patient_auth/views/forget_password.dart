@@ -40,46 +40,10 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
     super.dispose();
   }
 
-<<<<<<< HEAD
-=======
-  InputDecoration _inputDecoration({
-    required String hintText,
-    Widget? prefixIcon,
-    Widget? suffixIcon,
-    TextAlign textAlign = TextAlign.start,
-    required bool isDarkMode,
-  }) {
-    return InputDecoration(
-      hintText: hintText,
-      prefixIcon: prefixIcon,
-      suffixIcon: suffixIcon,
-      alignLabelWithHint: true,
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.r),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.r),
-        borderSide: BorderSide(color: AppColors.textLightGrey.withOpacity(0.4)),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8.r),
-        borderSide: BorderSide(
-          color: isDarkMode ? AppColors.darkPrimaryGreen : AppColors.primaryGreen,
-          width: 2.0,
-        ),
-      ),
-    );
-  }
-
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final themeColor = theme.primaryColor;
-<<<<<<< HEAD
-=======
-    final isDarkMode = theme.brightness == Brightness.dark;
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -113,10 +77,7 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
               children: [
                 SizedBox(height: 15.h),
                 Text(
-<<<<<<< HEAD
                   // TODO: أضف getters بـ AppStrings بدل النصوص المباشرة بهاد الشاشة
-=======
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                   state.step == ForgotPasswordStep.email ? 'Forgot Password' : 'Reset Password',
                   style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold, color: themeColor),
                 ),
@@ -135,17 +96,10 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
                   TextFormField(
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
-<<<<<<< HEAD
                     decoration: InputDecoration(
                       hintText: AppStrings.emailHint(context),
                       prefixIcon: const Icon(Icons.email_outlined),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
-=======
-                    decoration: _inputDecoration(
-                      hintText: AppStrings.emailHint(context),
-                      prefixIcon: const Icon(Icons.email_outlined),
-                      isDarkMode: isDarkMode,
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                     ),
                   ),
                   SizedBox(height: 25.h),
@@ -171,15 +125,9 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
                     keyboardType: TextInputType.number,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold, letterSpacing: 8),
-<<<<<<< HEAD
                     decoration: InputDecoration(
                       hintText: '------',
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
-=======
-                    decoration: _inputDecoration(
-                      hintText: '------',
-                      isDarkMode: isDarkMode,
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                     ),
                   ),
                   SizedBox(height: 20.h),
@@ -188,22 +136,14 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
                   TextFormField(
                     controller: _passwordController,
                     obscureText: state.obscurePassword,
-<<<<<<< HEAD
                     decoration: InputDecoration(
-=======
-                    decoration: _inputDecoration(
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                       hintText: AppStrings.passwordHint(context),
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                         icon: Icon(state.obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined),
                         onPressed: () => cubit.toggleObscurePassword(),
                       ),
-<<<<<<< HEAD
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
-=======
-                      isDarkMode: isDarkMode,
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                     ),
                   ),
                   SizedBox(height: 15.h),
@@ -212,22 +152,14 @@ class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
                   TextFormField(
                     controller: _confirmPasswordController,
                     obscureText: state.obscureConfirmPassword,
-<<<<<<< HEAD
                     decoration: InputDecoration(
-=======
-                    decoration: _inputDecoration(
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                       hintText: AppStrings.passwordHint(context),
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                         icon: Icon(state.obscureConfirmPassword ? Icons.visibility_off_outlined : Icons.visibility_outlined),
                         onPressed: () => cubit.toggleObscureConfirmPassword(),
                       ),
-<<<<<<< HEAD
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
-=======
-                      isDarkMode: isDarkMode,
->>>>>>> 6f2cf5c88c0f04be6d75e9a7241f4aeaf98d82f7
                     ),
                   ),
                   SizedBox(height: 25.h),
