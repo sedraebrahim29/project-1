@@ -56,11 +56,19 @@ class StepFourWidgets extends StatelessWidget {
                 SizedBox(height: 6.h),
                 TextFormField(
                   initialValue: model.clinicId,
+                  cursorColor: AppColors.primaryGreen,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     hintText: 'Enter the clinic ID',
                     prefixIcon: const Icon(Icons.local_hospital_outlined),
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                      borderSide: BorderSide(
+                        color: AppColors.primaryGreen,
+                        width: 2,
+                      ),
+                    ),
                   ),
                   onChanged: (value) => cubit.updateRegisterModel(model.copyWith(clinicId: value)),
                 ),
@@ -88,7 +96,16 @@ class StepFourWidgets extends StatelessWidget {
                 SizedBox(height: 6.h),
                 TextFormField(
                   initialValue: model.clinicName,
-                  decoration: InputDecoration(hintText: 'Clinic name', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r))),
+                  cursorColor: AppColors.primaryGreen,
+                  decoration: InputDecoration(hintText: 'Clinic name',
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                      borderSide: BorderSide(
+                        color: AppColors.primaryGreen,
+                        width: 2,
+                      ),
+                    ), ),
                   onChanged: (value) => cubit.updateRegisterModel(model.copyWith(clinicName: value)),
                 ),
                 SizedBox(height: 15.h),
@@ -96,7 +113,15 @@ class StepFourWidgets extends StatelessWidget {
                 SizedBox(height: 6.h),
                 TextFormField(
                   initialValue: model.clinicAddress,
-                  decoration: InputDecoration(hintText: 'Clinic address', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r))),
+                  cursorColor: AppColors.primaryGreen,
+                  decoration: InputDecoration(hintText: 'Clinic address', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                      borderSide: BorderSide(
+                        color: AppColors.primaryGreen,
+                        width: 2,
+                      ),
+                    ),),
                   onChanged: (value) => cubit.updateRegisterModel(model.copyWith(clinicAddress: value)),
                 ),
                 LocationPickField(
@@ -112,8 +137,16 @@ class StepFourWidgets extends StatelessWidget {
                 SizedBox(height: 6.h),
                 TextFormField(
                   initialValue: model.clinicPhone,
+                  cursorColor: AppColors.primaryGreen,
                   keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(hintText: 'Clinic phone', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r))),
+                  decoration: InputDecoration(hintText: 'Clinic phone', border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r)),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                      borderSide: BorderSide(
+                        color: AppColors.primaryGreen,
+                        width: 2,
+                      ),
+                    ),),
                   onChanged: (value) => cubit.updateRegisterModel(model.copyWith(clinicPhone: value)),
                 ),
                 SizedBox(height: 15.h),

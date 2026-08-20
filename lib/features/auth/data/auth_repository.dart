@@ -131,17 +131,38 @@ class AuthRepository {
 
     if (data is Map) {
       message = data['message']?.toString() ?? message;
+// هون عدلنا هاد الجزء لحتى يظهر تفاصيل الخطأ
       if (data['errors'] is Map) {
         errors = Map<String, dynamic>.from(data['errors']);
-        // أول رسالة validation نعرضها كملخص إذا ما كان في message واضح
-        if (data['message'] == null && errors.isNotEmpty) {
-          final firstKey = errors.keys.first;
-          final firstVal = errors[firstKey];
-          if (firstVal is List && firstVal.isNotEmpty) {
-            message = firstVal.first.toString();
-          }
+
+        if (errors.isNotEmpty) {
+          final messages = <String>[];
+
+          errors.forEach((field, value) {
+            if (value is List) {
+              for (final error in value) {
+                messages.add('$field: $error');
+              }
+            } else {
+              messages.add('$field: $value');
+            }
+          });
+
+          message = messages.join('\n');
         }
       }
+      // هاد الجزء القديم اللي ما كان يعرض تفاصيل الخطأ
+      // if (data['errors'] is Map) {
+      //   errors = Map<String, dynamic>.from(data['errors']);
+      //   // أول رسالة validation نعرضها كملخص إذا ما كان في message واضح
+      //   if (data['message'] == null && errors.isNotEmpty) {
+      //     final firstKey = errors.keys.first;
+      //     final firstVal = errors[firstKey];
+      //     if (firstVal is List && firstVal.isNotEmpty) {
+      //       message = firstVal.first.toString();
+      //     }
+      //   }
+      // }
     }
 
     return ApiException(message, statusCode: response.statusCode, errors: errors);
