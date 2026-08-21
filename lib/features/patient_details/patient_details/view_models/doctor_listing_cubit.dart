@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/constants/app_strings.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../data/doctor_listing_repository.dart';
 import '../models/doctor_dummy_data.dart';
 import 'doctor_listing_state.dart';

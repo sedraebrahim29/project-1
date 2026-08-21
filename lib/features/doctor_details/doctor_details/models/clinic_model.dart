@@ -1,4 +1,5 @@
-import '../../auth/doctor_auth/models/department_model.dart';
+import '../../../auth/doctor_auth/models/department_model.dart';
+
 
 /// عيادة عامة (من GET /clinics الحقيقي) - كل عيادة معها لائحة الأقسام
 /// المتوفرة فيها فعلياً، مستخدمة لبناء شاشة "الانضمام لعيادة".

@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled3/core/constants/setting.dart';
-import '../../../core/constants/app_strings.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/cubits/medical_record_status_cubit.dart';
-import '../../doctor_details/data/doctor_schedule_repository.dart';
-import '../../doctor_details/models/work_schedule_models.dart';
+import '../../../../core/Theme/app_colors.dart';
+import '../../../../core/constants/app_strings.dart';
+import '../../../../core/cubits/medical_record_status_cubit.dart';
+import '../../../doctor_details/data/doctor_schedule_repository.dart';
+import '../../../doctor_details/models/work_schedule_models.dart';
 import '../models/doctor_dummy_data.dart';
 import '../view_models/doctor_listing_cubit.dart';
 
@@ -461,7 +461,9 @@ class _DoctorProfileScreenState extends State<DoctorProfileScreen> {
             style: TextStyle(fontSize: bodyTextSize, fontWeight: FontWeight.w600, color: isDark ? AppColors.darkText.withOpacity(0.6) : AppColors.textLightGrey)),
         SizedBox(height: 8.h),
         if (slots.isEmpty)
-          Text(AppStrings.noSlotsForPeriod(context),
+          Text(
+              //AppStrings.noSlotsForPeriod(context),
+              'No appointments available',//حطيت هاد السطر بدال اللي فوقو بس مشان شيل الايرور
               style: TextStyle(fontSize: bodyTextSize - 1, color: AppColors.textLightGrey.withOpacity(0.7)))
         else
           Wrap(

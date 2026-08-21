@@ -1,8 +1,9 @@
 import 'dart:typed_data';
 import 'package:dio/dio.dart';
-import '../../../core/network/api_client.dart';
-import '../../../core/network/api_constants.dart';
-import '../../../core/network/api_exception.dart';
+
+import '../../../../core/network/api_client.dart';
+import '../../../../core/network/api_constants.dart';
+import '../../../../core/network/api_exception.dart';
 import '../models/doctor_profile_models.dart';
 
 /// نداءات الباك الحقيقية الخاصة بالطبيب - كل نقاط النهاية هون موجودة

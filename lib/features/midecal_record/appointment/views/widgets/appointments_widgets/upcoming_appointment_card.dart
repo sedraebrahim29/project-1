@@ -1,6 +1,6 @@
 /*import 'package:flutter/material.dart';
 import '../../../../../../core/theme/app_colors.dart';
-import '../../../models/appointment_model.dart';
+import '../../../view_models/appointment_model.dart';
 import 'status_badge.dart';
 
 // =============================================

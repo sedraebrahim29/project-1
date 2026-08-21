@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled3/core/constants/setting.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../../core/Theme/app_colors.dart';
 
 /// A single filter chip: [label] is what the user sees (translated), while
 /// [value] is the locale-independent value used for matching/selection so

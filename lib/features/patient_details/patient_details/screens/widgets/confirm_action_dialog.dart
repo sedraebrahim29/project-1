@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled3/core/constants/setting.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../../core/Theme/app_colors.dart';
 import '../../view_models/account_cubit.dart';
 import '../../view_models/account_state.dart';
 

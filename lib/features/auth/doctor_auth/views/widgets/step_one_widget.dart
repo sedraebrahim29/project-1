@@ -116,6 +116,7 @@ class _StepOneWidgetsState extends State<StepOneWidgets> {
                         SizedBox(height: 6.h),
                         TextFormField(
                           controller: _firstNameController,
+                          cursorColor: AppColors.primaryGreen,
                           validator: (val) => (val == null || val.isEmpty) ? AppStrings.requiredField(context) : null,
                           decoration: _inputDecoration(
                             hintText: AppStrings.firstNameHint(context),
@@ -136,6 +137,7 @@ class _StepOneWidgetsState extends State<StepOneWidgets> {
                         SizedBox(height: 6.h),
                         TextFormField(
                           controller: _lastNameController,
+                          cursorColor: AppColors.primaryGreen,
                           validator: (val) => (val == null || val.isEmpty) ? AppStrings.requiredField(context) : null,
                           decoration: _inputDecoration(
                             hintText: AppStrings.lastNameHint(context),
@@ -154,6 +156,7 @@ class _StepOneWidgetsState extends State<StepOneWidgets> {
               SizedBox(height: 6.h),
               TextFormField(
                 controller: _emailController,
+                cursorColor: AppColors.primaryGreen,
                 keyboardType: TextInputType.emailAddress,
                 validator: (val) => (val == null || val.isEmpty || !val.contains('@')) ? AppStrings.invalidEmail(context) : null,
                 decoration: _inputDecoration(
@@ -168,6 +171,7 @@ class _StepOneWidgetsState extends State<StepOneWidgets> {
               SizedBox(height: 6.h),
               TextFormField(
                 controller: _idCardNumberController,
+                cursorColor: AppColors.primaryGreen,
                 keyboardType: TextInputType.number,
                 validator: (val) => (val == null || val.isEmpty) ? AppStrings.requiredField(context) : null,
                 decoration: _inputDecoration(
@@ -182,6 +186,7 @@ class _StepOneWidgetsState extends State<StepOneWidgets> {
               SizedBox(height: 6.h),
               TextFormField(
                 controller: _passwordController,
+                cursorColor: AppColors.primaryGreen,
                 obscureText: _obscurePassword,
                 validator: (val) => (val == null || val.length < 8) ? AppStrings.passwordLengthWarning(context) : null,
                 decoration: _inputDecoration(
@@ -200,6 +205,7 @@ class _StepOneWidgetsState extends State<StepOneWidgets> {
               SizedBox(height: 6.h),
               TextFormField(
                 controller: _confirmPasswordController,
+                cursorColor: AppColors.primaryGreen,
                 obscureText: _obscureConfirmPassword,
                 validator: (val) {
                   if (val == null || val.isEmpty) return AppStrings.requiredField(context);

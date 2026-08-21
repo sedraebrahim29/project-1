@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../auth/data/auth_repository.dart';
+import '../../../auth/data/auth_repository.dart';
 import 'account_state.dart';
 
 /// Backs both the "Delete account" and "Log out" confirmation flows, so the

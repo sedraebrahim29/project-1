@@ -491,7 +491,9 @@ class AppStrings {
   static String morning(BuildContext context) =>
       _isEn(context) ? 'Morning' : 'الفترة الصباحية';
   static String afternoon(BuildContext context) =>
-      _isEn(context) ? 'Afternoon' : 'الفترة المسائية';
+      _isEn(context) ? 'Afternoon' : 'فترة بعد الظهر';
+  static String noSlotsForPeriod(BuildContext context) =>
+      _isEn(context) ? 'No slots available' : 'لا يوجد مواعيد متاحة';
   static String consultationFeeLabel(BuildContext context) =>
       _isEn(context) ? 'Consultation Fee' : 'قيمة الاستشارة';
   static String bookAppointment(BuildContext context) =>
@@ -715,4 +717,50 @@ class AppStrings {
   static String deleteAttachmentConfirmDesc(BuildContext context) => _isEn(context)
       ? 'This action cannot be undone.'
       : 'لا يمكن التراجع عن هذا الإجراء.';
+
+  // --- Consultation Chat (shared: doctor + patient, features/consultation_chat) ---
+  static String myConsultations(BuildContext context) =>
+      _isEn(context) ? 'My Consultations' : 'استشاراتي';
+  static String typeMessage(BuildContext context) =>
+      _isEn(context) ? 'Type a message...' : 'اكتب رسالة...';
+  static String noMessagesYet(BuildContext context) =>
+      _isEn(context) ? 'No messages yet' : 'لا توجد رسائل بعد';
+  static String noMessagesHint(BuildContext context) => _isEn(context)
+      ? 'Start the conversation by sending a message.'
+      : 'ابدأ المحادثة بإرسال رسالة.';
+  static String noConsultationsYet(BuildContext context) =>
+      _isEn(context) ? 'No consultations yet' : 'لا توجد استشارات بعد';
+  static String noConsultationsHint(BuildContext context) => _isEn(context)
+      ? 'Your consultation conversations will appear here.'
+      : 'ستظهر محادثات استشاراتك هنا.';
+  static String consultationActive(BuildContext context) =>
+      _isEn(context) ? 'Consultation active' : 'الاستشارة فعّالة';
+  static String consultationEnded(BuildContext context) =>
+      _isEn(context) ? 'Consultation ended' : 'انتهت الاستشارة';
+  static String consultationNotStarted(BuildContext context) =>
+      _isEn(context) ? 'Consultation has not started yet' : 'لم تبدأ الاستشارة بعد';
+  static String timeRemaining(BuildContext context) =>
+      _isEn(context) ? 'Time remaining' : 'الوقت المتبقي';
+  static String extraTime(BuildContext context) =>
+      _isEn(context) ? 'Extra time' : 'وقت إضافي';
+  static String yesterday(BuildContext context) =>
+      _isEn(context) ? 'Yesterday' : 'أمس';
+  static String searchMessages(BuildContext context) =>
+      _isEn(context) ? 'Search messages...' : 'ابحث في الرسائل...';
+  static String filterAll(BuildContext context) =>
+      _isEn(context) ? 'All' : 'الكل';
+  static String filterUnread(BuildContext context) =>
+      _isEn(context) ? 'Unread' : 'غير مقروءة';
+  static String filterUrgent(BuildContext context) =>
+      _isEn(context) ? 'Urgent' : 'عاجل';
+
+  /// اسم مختصر لليوم (Mon..Sun) لعرض وقت آخر رسالة بلائحة الاستشارات
+  /// لما تكون أقدم من "أمس" وأحدث من أسبوع (مثال بالتصميم: "Tue").
+  /// [weekday] هو DateTime.weekday (1 = Monday .. 7 = Sunday).
+  static String weekdayShort(BuildContext context, int weekday) {
+    const en = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const ar = ['إثنين', 'ثلاثاء', 'أربعاء', 'خميس', 'جمعة', 'سبت', 'أحد'];
+    final index = (weekday - 1).clamp(0, 6);
+    return _isEn(context) ? en[index] : ar[index];
+  }
 }

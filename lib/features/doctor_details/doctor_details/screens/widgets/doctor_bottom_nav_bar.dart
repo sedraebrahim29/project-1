@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled3/core/constants/setting.dart';
-import '../../../../core/theme/app_colors.dart';
-import '../../../../core/constants/app_strings.dart';
-import '../../../../core/constants/app_strings_doctor.dart';
+import '../../../../../core/Theme/app_colors.dart';
+import '../../../../../core/constants/app_strings.dart';
+import '../../../../../core/constants/app_strings_doctor.dart';
+
 
 /// نفس هيكلية CustomBottomNavBar تبع المريض (patient_details) بالضبط،
 /// بس بأربع تابات فقط للطبيب: الرئيسية / المواعيد / جدول العمل / شات

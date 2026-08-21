@@ -4,6 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled3/features/auth/Login.dart';
 import 'core/theme/app_theme.dart';
 import 'core/constants/setting.dart';
+
+
+import 'features/auth/doctor_auth/view_models/register_cubit.dart';
+import 'features/auth/doctor_auth/view_models/register_state.dart';
+import 'features/auth/doctor_auth/views/doctor_register_screen.dart';
+import 'features/auth/patient_auth/views/account_under_review_screen.dart';
+import 'features/consultaion_chat/views/doctor_chat_screen.dart';
 import 'features/midecal_record/initial_medical_records/views/screens/medical_profile_screens/medical_history_screen.dart';
 void main() {
   runApp(const MyApp());
@@ -11,11 +18,17 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SettingsCubit(),
+    return  MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => SettingsCubit(),
+        ),
+        BlocProvider(
+          create: (context) => DoctorRegisterCubit(),
+        ),
+      ],
       child: BlocBuilder<SettingsCubit, SettingsState>(
         builder: (context, state) {
           return ScreenUtilInit(
@@ -40,7 +53,7 @@ class MyApp extends StatelessWidget {
                     child: widget!,
                   );
                 },
-                home: const LoginScreen(),
+                home:  DoctorChatScreen(doctorId: 1),
               );
             },
           );

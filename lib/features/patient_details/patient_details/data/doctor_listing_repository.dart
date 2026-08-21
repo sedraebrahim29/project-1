@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import '../../../core/network/api_client.dart';
-import '../../../core/network/api_constants.dart';
+import '../../../../core/network/api_client.dart';
+import '../../../../core/network/api_constants.dart';
 import '../models/doctor_dummy_data.dart';
 
 /// ✅ GET /doctors صار endpoint حقيقي وموجود بالباك (تأكدنا من الرد

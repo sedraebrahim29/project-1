@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled3/core/constants/setting.dart';
-import '../../../../core/constants/app_strings.dart';
-import '../../../../core/theme/app_colors.dart';
+import '../../../../../core/Theme/app_colors.dart';
+import '../../../../../core/constants/app_strings.dart';
+
+import '../../../../../core/cubits/medical_record_status_cubit.dart';
 import '../../models/doctor_dummy_data.dart';
 import '../../view_models/doctor_listing_cubit.dart';
-import '../../../../core/cubits/medical_record_status_cubit.dart';
 import '../doctor_profile_screen.dart';
 
 /// A compact doctor row for the Home screen — lighter than

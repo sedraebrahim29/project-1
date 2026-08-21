@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:untitled3/core/constants/setting.dart';
-import '../../../core/constants/app_strings.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../../core/Theme/app_colors.dart';
+import '../../../../core/constants/app_strings.dart';
+import '../../../auth/Login.dart';
+
 import '../models/patient_profile_dummy_data.dart';
-import '../../auth/Login.dart';
 import '../views/widgets/settings_drawer_widget.dart';
 import 'widgets/confirm_action_dialog.dart';
 

@@ -2,7 +2,7 @@
 
 // استدعاء الـ model والـ widgets والألوان
 import '../../../../../../core/theme/app_colors.dart';
-import '../../../models/appointment_model.dart';
+import '../../../view_models/appointment_model.dart';
 import '../../widgets/appointments_widgets/past_appointment_card.dart';
 import '../../widgets/appointments_widgets/upcoming_appointment_card.dart';
 

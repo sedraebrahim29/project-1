@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
-import '../../../core/network/api_client.dart';
-import '../../../core/network/api_constants.dart';
+
+
+import '../../../../core/network/api_client.dart';
+import '../../../../core/network/api_constants.dart';
 import '../models/clinic_model.dart';
 
 /// ✅ نداء حقيقي وعام لـ GET /clinics - بيرجع بس العيادات الفعّالة

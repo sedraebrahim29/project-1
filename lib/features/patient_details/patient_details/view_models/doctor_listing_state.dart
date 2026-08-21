@@ -1,6 +1,6 @@
 
 
-import '../../../core/constants/app_strings.dart';
+import '../../../../core/constants/app_strings.dart';
 import '../models/doctor_dummy_data.dart';
 
 class DoctorListingState {
